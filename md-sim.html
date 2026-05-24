@@ -113,7 +113,17 @@
     }
     .expense-field input:focus { border-color: #aaa; }
 
-    .result-row { border-top: 1px solid var(--border); padding-top: 10px; display: flex; justify-content: flex-end; }
+    .result-row {
+      border-top: 1px solid var(--border); padding-top: 10px;
+      display: flex; justify-content: flex-end;
+      gap: 16px; flex-wrap: wrap; align-items: baseline;
+    }
+    .set-time-result, .set-income-result {
+      font-size: 12px; color: var(--text-light);
+    }
+    .set-time-result span, .set-income-result span {
+      font-size: 13px; font-weight: 700; color: var(--text);
+    }
     .hourly-result { font-size: 13px; font-weight: 700; color: var(--text); }
     .hourly-result span { font-size: 18px; }
     .hourly-result.positive span { color: #2e7d32; }
@@ -198,6 +208,22 @@
 
       const badge    = card.querySelector('.result-badge');
       const hourlyEl = card.querySelector('.hourly-result');
+
+      // 1セットあたりの時間
+      const secPerSet = sets > 0 ? Math.round(prepSec / sets) + setSec : 0;
+      const setMin = Math.floor(secPerSet / 60);
+      const setSecRem = Math.round(secPerSet % 60);
+      const setTimeStr = secPerSet > 0
+        ? (setMin > 0 ? `${setMin}分${String(setSecRem).padStart(2,'0')}秒` : `${setSecRem}秒`)
+        : '---';
+      card.querySelector('.set-time-val').textContent = setTimeStr;
+
+      // 1セットあたりの収入（経費按分後）
+      const netPerSet = sets > 0
+        ? expectedPerSet - setExpense - (prepCost / sets)
+        : null;
+      card.querySelector('.set-income-val').textContent =
+        netPerSet !== null ? formatZ(netPerSet) : '---';
 
       if (hourly === null || totalSec === 0) {
         badge.textContent  = '未入力';
@@ -336,6 +362,8 @@
           </div>
 
           <div class="result-row">
+            <div class="set-time-result">1セット <span class="set-time-val">---</span></div>
+            <div class="set-income-result">1セット収入 <span class="set-income-val">---</span></div>
             <div class="hourly-result">時給 <span>---</span></div>
           </div>
         </div>
