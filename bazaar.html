@@ -206,11 +206,11 @@
             <th data-col="x">X<span class="sort-icon"></span></th>
             <th data-col="y">Y<span class="sort-icon"></span></th>
             <th data-col="type">種別<span class="sort-icon"></span></th>
+            <th data-col="refine">精錬<span class="sort-icon"></span></th>
+            <th data-col="trans">超越<span class="sort-icon"></span></th>
             <th data-col="name">アイテム名<span class="sort-icon"></span></th>
             <th data-col="count">個数<span class="sort-icon"></span></th>
             <th data-col="price">価格(z)<span class="sort-icon"></span></th>
-            <th data-col="refine">精錬<span class="sort-icon"></span></th>
-            <th data-col="trans">超越<span class="sort-icon"></span></th>
             <th>カードorエンチャ</th>
           </tr>
         </thead>
@@ -413,11 +413,11 @@
             <td class="td-center">${r.x ?? ''}</td>
             <td class="td-center">${r.y ?? ''}</td>
             <td>${badge}</td>
+            <td class="td-center">${refineStr}</td>
+            <td class="td-center">${transStr}</td>
             <td class="td-name">${r.name}</td>
             <td class="td-count">${r.count.toLocaleString()}</td>
             <td class="td-price">${r.price.toLocaleString()}</td>
-            <td class="td-center">${refineStr}</td>
-            <td class="td-center">${transStr}</td>
             <td>${cardHtml}</td>
           </tr>`;
         }).join('');
