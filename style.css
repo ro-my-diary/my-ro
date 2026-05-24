@@ -86,14 +86,14 @@ nav a.disabled {
   overflow: hidden;
   background: #c8d8a0;
   /* 幅が950px以上なら160px固定、狭くなったら比率で縮小 */
-  height: min(190px, calc(100vw * 200 / 950));
+  height: min(200px, calc(100vw * 200 / 950));
 }
 
 .hero-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: left center;
+  object-position: left top;
   display: block;
 }
 
