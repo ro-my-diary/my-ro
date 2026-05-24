@@ -13,13 +13,14 @@
 
     .bazaar-wrap { max-width: 1200px; margin: 0 auto; padding: 24px 40px 60px; }
 
-    /* 日付タブ */
+    /* 日付タブ（複数選択トグル式） */
     .date-tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; }
     .date-tab {
       font-size: 13px; padding: 6px 14px;
       border: 1px solid var(--border); border-radius: 4px;
       background: #fff; cursor: pointer; color: var(--text-light);
       font-family: 'Noto Sans JP', sans-serif; transition: all 0.12s;
+      user-select: none;
     }
     .date-tab:hover { background: #f5f5f5; }
     .date-tab.active { background: var(--text); color: #fff; border-color: var(--text); }
@@ -44,7 +45,6 @@
     .filter-range input { flex: 1; min-width: 0; }
     .filter-range span { font-size: 11px; color: var(--text-light); }
 
-    /* フィルターボタン */
     .filter-actions { display: flex; gap: 8px; align-items: flex-end; }
     .btn-filter {
       font-size: 13px; font-family: 'Noto Sans JP', sans-serif;
@@ -60,15 +60,12 @@
     }
     .btn-reset:hover { background: #f5f5f5; }
 
-    /* 結果ステータス */
     .result-status { font-size: 12px; color: var(--text-light); margin-bottom: 10px; }
     .result-status strong { color: var(--text); }
 
     /* テーブル */
     .table-wrap { overflow-x: auto; }
-    table {
-      width: 100%; border-collapse: collapse; font-size: 13px;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead th {
       text-align: left; padding: 8px 10px;
       border-bottom: 2px solid var(--border);
@@ -78,7 +75,7 @@
     }
     thead th:hover { color: var(--text); }
     thead th .sort-icon { margin-left: 4px; opacity: 0.4; }
-    thead th.sort-asc .sort-icon::after  { content: '▲'; }
+    thead th.sort-asc  .sort-icon::after { content: '▲'; }
     thead th.sort-desc .sort-icon::after { content: '▼'; }
     thead th:not(.sort-asc):not(.sort-desc) .sort-icon::after { content: '⇅'; }
 
@@ -90,23 +87,16 @@
     .td-name   { font-weight: 500; min-width: 160px; white-space: normal; }
     .td-price  { text-align: right; font-weight: 700; }
     .td-count  { text-align: right; }
-    .td-refine { text-align: center; }
-    .td-badge  {
-      display: inline-block; font-size: 10px; padding: 2px 6px;
-      border-radius: 3px; font-weight: 700;
-    }
+    .td-center { text-align: center; }
+    .td-badge  { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 700; }
     .badge-sell { background: #e3f2fd; color: #1565c0; }
     .badge-buy  { background: #fce4ec; color: #880e4f; }
 
     .card-pills { display: flex; gap: 3px; flex-wrap: wrap; }
-    .card-pill {
-      font-size: 10px; padding: 1px 5px;
-      background: #f0f0f0; border-radius: 3px; color: #555;
-    }
+    .card-pill { font-size: 10px; padding: 1px 5px; background: #f0f0f0; border-radius: 3px; color: #555; }
 
     .no-data { text-align: center; padding: 60px 0; color: var(--text-light); font-size: 14px; }
 
-    /* ページネーション */
     .pagination { display: flex; gap: 4px; margin-top: 16px; justify-content: center; flex-wrap: wrap; }
     .page-btn {
       font-size: 13px; font-family: 'Noto Sans JP', sans-serif;
@@ -115,7 +105,6 @@
     }
     .page-btn:hover { background: #f5f5f5; }
     .page-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
-    .page-btn:disabled { opacity: 0.3; cursor: default; }
 
     @media (max-width: 768px) {
       .page-hero { padding: 24px 20px; }
@@ -148,7 +137,7 @@
 
   <div class="bazaar-wrap">
 
-    <!-- 日付タブ -->
+    <!-- 日付タブ（複数選択） -->
     <div class="date-tabs" id="dateTabs"></div>
 
     <!-- フィルター -->
@@ -160,7 +149,19 @@
         </select>
       </div>
       <div class="filter-group">
-        <div class="filter-label">ワールド</div>
+        <div class="filter-label">超越 (以上)</div>
+        <input class="filter-input" type="number" id="fTrans" placeholder="0以上">
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">精錬値 (以上)</div>
+        <input class="filter-input" type="number" id="fRefine" placeholder="0以上">
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">アイテム名検索</div>
+        <input class="filter-input" type="text" id="fName" placeholder="部分一致">
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">鯖</div>
         <select class="filter-select" id="fWorld">
           <option value="">すべて</option>
         </select>
@@ -187,18 +188,6 @@
           <input class="filter-input" type="number" id="fQtyMax" placeholder="以下">
         </div>
       </div>
-      <div class="filter-group">
-        <div class="filter-label">精錬値 (以上)</div>
-        <input class="filter-input" type="number" id="fRefine" placeholder="0以上">
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">超越 (以上)</div>
-        <input class="filter-input" type="number" id="fTrans" placeholder="0以上">
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">アイテム名検索</div>
-        <input class="filter-input" type="text" id="fName" placeholder="部分一致">
-      </div>
       <div class="filter-actions">
         <button class="btn-filter" onclick="applyFilter()">絞り込む</button>
         <button class="btn-reset" onclick="resetFilter()">リセット</button>
@@ -207,21 +196,22 @@
 
     <div class="result-status" id="resultStatus"></div>
 
-    <!-- テーブル -->
     <div class="table-wrap">
       <table id="bazaarTable">
         <thead>
           <tr>
             <th data-col="time">時刻<span class="sort-icon"></span></th>
-            <th data-col="world">ワールド<span class="sort-icon"></span></th>
+            <th data-col="world">鯖<span class="sort-icon"></span></th>
             <th data-col="map">マップ<span class="sort-icon"></span></th>
+            <th data-col="x">X<span class="sort-icon"></span></th>
+            <th data-col="y">Y<span class="sort-icon"></span></th>
             <th data-col="type">種別<span class="sort-icon"></span></th>
             <th data-col="name">アイテム名<span class="sort-icon"></span></th>
             <th data-col="count">個数<span class="sort-icon"></span></th>
             <th data-col="price">価格(z)<span class="sort-icon"></span></th>
             <th data-col="refine">精錬<span class="sort-icon"></span></th>
             <th data-col="trans">超越<span class="sort-icon"></span></th>
-            <th>カード</th>
+            <th>カードorエンチャ</th>
           </tr>
         </thead>
         <tbody id="bazaarBody"></tbody>
@@ -234,65 +224,91 @@
   <footer>© 2026 RO活動日記</footer>
 
   <script>
-    const PAGE_SIZE = 100;
-    let allData     = [];   // 全データ（JSONから読み込み）
-    let filtered    = [];   // フィルター後
-    let currentPage = 1;
-    let sortCol     = '';
-    let sortDir     = 1;    // 1=昇順, -1=降順
-    let selectedDate = '';
+    const PAGE_SIZE   = 100;
+    let allData       = {};   // { 'YYYY-MM-DD': [...] } 日付ごとのデータ
+    let filtered      = [];
+    let currentPage   = 1;
+    let sortCol       = '';
+    let sortDir       = 1;
+    let selectedDates = new Set(); // 選択中の日付セット
 
-    // ---- JSONロード ----
-    async function loadData(dateStr) {
+    // ---- 日付フォーマット ----
+    function formatDate(d) {
+      const y   = d.getFullYear();
+      const m   = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      return `${y}-${m}-${day}`;
+    }
+
+    // ---- JSONロード（1日分） ----
+    async function loadDate(dateStr) {
+      if (allData[dateStr] !== undefined) return; // キャッシュ済み
       const url = `data/bazaar_${dateStr}.json?_=${Date.now()}`;
       try {
         const res = await fetch(url);
         if (!res.ok) throw new Error();
-        allData = await res.json();
+        allData[dateStr] = await res.json();
       } catch {
-        allData = [];
+        allData[dateStr] = [];
       }
-      buildSelects();
-      applyFilter();
     }
 
     // ---- 日付タブ生成 ----
     function buildDateTabs() {
       const container = document.getElementById('dateTabs');
       container.innerHTML = '';
-      const today = new Date();
+      const today  = new Date();
       const labels = ['今日','昨日','2日前','3日前','4日前','5日前','6日前'];
+
       for (let i = 0; i < 7; i++) {
         const d = new Date(today);
         d.setDate(today.getDate() - i);
         const str = formatDate(d);
         const btn = document.createElement('button');
-        btn.className = 'date-tab' + (i === 0 ? ' active' : '');
+        btn.className   = 'date-tab' + (i === 0 ? ' active' : '');
         btn.textContent = `${labels[i]}（${str}）`;
         btn.dataset.date = str;
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.date-tab').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          selectedDate = str;
-          loadData(str);
+
+        btn.addEventListener('click', async () => {
+          if (selectedDates.has(str)) {
+            // 選択解除（最低1つは残す）
+            if (selectedDates.size > 1) {
+              selectedDates.delete(str);
+              btn.classList.remove('active');
+            }
+          } else {
+            // 選択追加
+            selectedDates.add(str);
+            btn.classList.add('active');
+            await loadDate(str);
+          }
+          buildSelects();
+          applyFilter();
         });
+
         container.appendChild(btn);
       }
-      selectedDate = formatDate(today);
+
+      // 今日を初期選択
+      const todayStr = formatDate(today);
+      selectedDates.add(todayStr);
     }
 
-    function formatDate(d) {
-      const y = d.getFullYear();
-      const m = String(d.getMonth()+1).padStart(2,'0');
-      const day = String(d.getDate()).padStart(2,'0');
-      return `${y}-${m}-${day}`;
+    // ---- 選択中の全データを結合 ----
+    function getMergedData() {
+      let merged = [];
+      selectedDates.forEach(d => {
+        if (allData[d]) merged = merged.concat(allData[d]);
+      });
+      return merged;
     }
 
     // ---- セレクト動的生成 ----
     function buildSelects() {
-      fillSelect('fType',  [...new Set(allData.map(r => r.type).filter(Boolean))].sort());
-      fillSelect('fWorld', [...new Set(allData.map(r => r.world).filter(Boolean))].sort());
-      fillSelect('fMap',   [...new Set(allData.map(r => r.map).filter(Boolean))].sort());
+      const data = getMergedData();
+      fillSelect('fType',  [...new Set(data.map(r => r.type).filter(Boolean))].sort());
+      fillSelect('fWorld', [...new Set(data.map(r => r.world).filter(Boolean))].sort());
+      fillSelect('fMap',   [...new Set(data.map(r => r.map).filter(Boolean))].sort());
     }
 
     function fillSelect(id, options) {
@@ -320,7 +336,7 @@
       const trans    = parseFloat(document.getElementById('fTrans').value);
       const name     = document.getElementById('fName').value.trim();
 
-      filtered = allData.filter(r => {
+      filtered = getMergedData().filter(r => {
         if (type  && r.type  !== type)  return false;
         if (world && r.world !== world) return false;
         if (map   && r.map   !== map)   return false;
@@ -349,12 +365,8 @@
     document.querySelectorAll('thead th[data-col]').forEach(th => {
       th.addEventListener('click', () => {
         const col = th.dataset.col;
-        if (sortCol === col) {
-          sortDir *= -1;
-        } else {
-          sortCol = col;
-          sortDir = 1;
-        }
+        sortDir = (sortCol === col) ? sortDir * -1 : 1;
+        sortCol = col;
         document.querySelectorAll('thead th').forEach(t => t.classList.remove('sort-asc','sort-desc'));
         th.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
         renderTable();
@@ -382,7 +394,7 @@
 
       const tbody = document.getElementById('bazaarBody');
       if (page.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="no-data">データがありません</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="no-data">データがありません</td></tr>`;
       } else {
         tbody.innerHTML = page.map(r => {
           const cards = [r.card1, r.card2, r.card3, r.card4].filter(Boolean);
@@ -398,12 +410,14 @@
             <td class="td-time">${r.time}</td>
             <td>${r.world ?? ''}</td>
             <td>${r.map ?? ''}</td>
+            <td class="td-center">${r.x ?? ''}</td>
+            <td class="td-center">${r.y ?? ''}</td>
             <td>${badge}</td>
             <td class="td-name">${r.name}</td>
             <td class="td-count">${r.count.toLocaleString()}</td>
             <td class="td-price">${r.price.toLocaleString()}</td>
-            <td class="td-refine">${refineStr}</td>
-            <td class="td-refine">${transStr}</td>
+            <td class="td-center">${refineStr}</td>
+            <td class="td-center">${transStr}</td>
             <td>${cardHtml}</td>
           </tr>`;
         }).join('');
@@ -413,10 +427,9 @@
     }
 
     function renderPagination(total) {
-      const pages = Math.ceil(total / PAGE_SIZE);
+      const pages     = Math.ceil(total / PAGE_SIZE);
       const container = document.getElementById('pagination');
       if (pages <= 1) { container.innerHTML = ''; return; }
-
       let html = '';
       for (let i = 1; i <= pages; i++) {
         html += `<button class="page-btn ${i === currentPage ? 'active' : ''}"
@@ -432,8 +445,15 @@
     }
 
     // ---- 初期化 ----
-    buildDateTabs();
-    loadData(formatDate(new Date()));
+    async function init() {
+      buildDateTabs();
+      const todayStr = formatDate(new Date());
+      await loadDate(todayStr);
+      buildSelects();
+      applyFilter();
+    }
+
+    init();
   </script>
 
 </body>
