@@ -132,7 +132,7 @@
   <div class="page-hero">
     <div class="hero-tag">Bazaar</div>
     <h1>露店巡り</h1>
-    <p>露店の最新価格データです。6時間毎に更新されます。</p>
+    <p>見かけた露店です。座標ズレ、品物違い、古い情報の可能性大。<br>参考程度に…。</p>
   </div>
 
   <div class="bazaar-wrap">
@@ -142,24 +142,6 @@
 
     <!-- フィルター -->
     <div class="filter-area">
-      <div class="filter-group">
-        <div class="filter-label">種別</div>
-        <select class="filter-select" id="fType">
-          <option value="">すべて</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">超越 (以上)</div>
-        <input class="filter-input" type="number" id="fTrans" placeholder="0以上">
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">精錬値 (以上)</div>
-        <input class="filter-input" type="number" id="fRefine" placeholder="0以上">
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">アイテム名検索</div>
-        <input class="filter-input" type="text" id="fName" placeholder="部分一致">
-      </div>
       <div class="filter-group">
         <div class="filter-label">鯖</div>
         <select class="filter-select" id="fWorld">
@@ -173,12 +155,22 @@
         </select>
       </div>
       <div class="filter-group">
-        <div class="filter-label">価格 (z)</div>
-        <div class="filter-range">
-          <input class="filter-input" type="number" id="fPriceMin" placeholder="以上">
-          <span>〜</span>
-          <input class="filter-input" type="number" id="fPriceMax" placeholder="以下">
-        </div>
+        <div class="filter-label">種別</div>
+        <select class="filter-select" id="fType">
+          <option value="">すべて</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">精錬値 (以上)</div>
+        <input class="filter-input" type="number" id="fRefine" placeholder="0以上">
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">超越 (以上)</div>
+        <input class="filter-input" type="number" id="fTrans" placeholder="0以上">
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">アイテム名検索</div>
+        <input class="filter-input" type="text" id="fName" placeholder="部分一致">
       </div>
       <div class="filter-group">
         <div class="filter-label">個数</div>
@@ -186,6 +178,14 @@
           <input class="filter-input" type="number" id="fQtyMin" placeholder="以上">
           <span>〜</span>
           <input class="filter-input" type="number" id="fQtyMax" placeholder="以下">
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">価格 (z)</div>
+        <div class="filter-range">
+          <input class="filter-input" type="number" id="fPriceMin" placeholder="以上">
+          <span>〜</span>
+          <input class="filter-input" type="number" id="fPriceMax" placeholder="以下">
         </div>
       </div>
       <div class="filter-actions">
