@@ -188,6 +188,12 @@
           <input class="filter-input" type="number" id="fPriceMax" placeholder="以下">
         </div>
       </div>
+      <div class="filter-group" style="justify-content: flex-end;">
+        <label style="display:flex; align-items:center; gap:6px; font-size:13px; cursor:pointer; color:var(--text);">
+          <input type="checkbox" id="fDedupe" style="width:15px;height:15px;cursor:pointer;">
+          重複はまとめる
+        </label>
+      </div>
       <div class="filter-actions">
         <button class="btn-filter" onclick="applyFilter()">絞り込む</button>
         <button class="btn-reset" onclick="resetFilter()">リセット</button>
@@ -351,6 +357,19 @@
       });
 
       currentPage = 1;
+
+      // 重複まとめ（全列が同じものは最新1件だけ残す）
+      if (document.getElementById('fDedupe').checked) {
+        const seen = new Map();
+        filtered.forEach(r => {
+          const key = `${r.world}_${r.map}_${r.x}_${r.y}_${r.type}_${r.refine}_${r.trans}_${r.name}_${r.count}_${r.price}_${r.card1}_${r.card2}_${r.card3}_${r.card4}`;
+          if (!seen.has(key) || r.time > seen.get(key).time) {
+            seen.set(key, r);
+          }
+        });
+        filtered = Array.from(seen.values());
+      }
+
       renderTable();
     }
 
