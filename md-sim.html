@@ -185,7 +185,7 @@
 
     function calcCard(card) {
       const prepSec    = parseFloat(card.querySelector('.prep-sec').value)    || 0;
-      const sets       = parseFloat(card.querySelector('.sets').value)        || 0;
+      const sets       = parseFloat(card.querySelector('.sets').value)        || 1;
       const setSec     = parseFloat(card.querySelector('.set-sec').value)     || 0;
       const prepCost   = parseFloat(card.querySelector('.prep-cost').value)   || 0;
       const setExpense = parseFloat(card.querySelector('.set-expense').value) || 0;
@@ -330,7 +330,7 @@
           <div class="time-row">
             <div class="time-field">準備 <input class="prep-sec" type="number" placeholder="0"> 秒</div>
             <div class="time-field">
-              <input class="sets" type="number" placeholder="1"> セット ×
+              <input class="sets" type="number" placeholder="1" value="1"> セット ×
               <input class="set-sec" type="number" placeholder="0"> 秒
             </div>
           </div>
