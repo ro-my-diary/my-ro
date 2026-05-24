@@ -7,23 +7,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
+    /* スピナー非表示 */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+
     .page-hero {
       padding: 40px 40px 32px;
       max-width: 1100px;
       margin: 0 auto;
       border-bottom: 1px solid var(--border);
     }
-
-    .page-hero h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .page-hero p {
-      font-size: 13px;
-      color: var(--text-light);
-    }
+    .page-hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .page-hero p  { font-size: 13px; color: var(--text-light); }
 
     .sim-section {
       max-width: 1100px;
@@ -38,11 +34,7 @@
     }
 
     /* MDカード */
-    .md-card {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-    }
+    .md-card { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
 
     .md-card-header {
       background: #f7f7f7;
@@ -54,186 +46,108 @@
     }
 
     .md-card-header input.md-name {
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 14px; font-weight: 700;
       font-family: 'Noto Sans JP', sans-serif;
-      border: none;
-      background: transparent;
-      color: var(--text);
-      flex: 1;
-      outline: none;
+      border: none; background: transparent;
+      color: var(--text); flex: 1; outline: none;
     }
-
-    .md-card-header input.md-name::placeholder {
-      color: #bbb;
-      font-weight: 400;
-    }
+    .md-card-header input.md-name::placeholder { color: #bbb; font-weight: 400; }
 
     .result-badge {
-      font-size: 12px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
-      white-space: nowrap;
+      font-size: 12px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px; white-space: nowrap;
     }
+    .result-badge.positive { background: #e8f5e9; color: #2e7d32; }
+    .result-badge.negative { background: #fdecea; color: #c62828; }
+    .result-badge.neutral  { background: #f0f0f0; color: #888; }
 
-    .result-badge.positive {
-      background: #e8f5e9;
-      color: #2e7d32;
-    }
-
-    .result-badge.negative {
-      background: #fdecea;
-      color: #c62828;
-    }
-
-    .result-badge.neutral {
-      background: #f0f0f0;
-      color: #888;
-    }
-
-    .md-card-body {
-      padding: 14px 16px;
-    }
+    .md-card-body { padding: 14px 16px; }
 
     /* 時間設定行 */
     .time-row {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 12px;
-      align-items: center;
-      flex-wrap: wrap;
+      display: flex; gap: 16px; margin-bottom: 12px;
+      align-items: center; flex-wrap: wrap;
     }
-
     .time-field {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--text-light);
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-light);
     }
-
     .time-field input {
-      width: 60px;
-      font-size: 13px;
+      width: 60px; font-size: 13px;
       font-family: 'Noto Sans JP', sans-serif;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 4px 8px;
-      text-align: right;
-      outline: none;
-      color: var(--text);
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 4px 8px; text-align: right; outline: none; color: var(--text);
     }
-
-    .time-field input:focus {
-      border-color: #aaa;
-    }
+    .time-field input:focus { border-color: #aaa; }
 
     /* アイテムテーブル */
     .item-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-bottom: 12px;
+      width: 100%; border-collapse: collapse;
+      font-size: 12px; margin-bottom: 12px;
     }
-
     .item-table thead th {
-      text-align: left;
-      color: var(--text-light);
-      font-weight: 500;
-      padding: 4px 6px;
-      border-bottom: 1px solid var(--border);
-      font-size: 11px;
-      letter-spacing: 0.05em;
+      text-align: left; color: var(--text-light); font-weight: 500;
+      padding: 4px 6px; border-bottom: 1px solid var(--border);
+      font-size: 11px; letter-spacing: 0.05em;
     }
+    .item-table tbody td { padding: 3px 4px; }
 
-    .item-table tbody td {
-      padding: 3px 4px;
-    }
-
+    /* 入力欄に常に枠を表示 */
     .item-table input {
-      width: 100%;
-      font-size: 12px;
-      font-family: 'Noto Sans JP', sans-serif;
-      border: 1px solid transparent;
-      border-radius: 3px;
-      padding: 4px 6px;
-      outline: none;
-      color: var(--text);
-      background: transparent;
-      transition: border-color 0.1s, background 0.1s;
-    }
-
-    .item-table input:focus {
-      border-color: var(--border);
-      background: #fafafa;
-    }
-
-    .item-table input.drop-input {
-      text-align: right;
-      width: 70px;
-    }
-
-    .item-table input.price-input {
-      text-align: right;
-    }
-
-    .item-table .expected {
-      text-align: right;
-      padding: 4px 6px;
-      color: var(--text-light);
-      font-size: 11px;
-      white-space: nowrap;
-    }
-
-    /* 経費・時給行 */
-    .summary-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .expense-field {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--text-light);
-    }
-
-    .expense-field input {
-      width: 100px;
-      font-size: 13px;
+      width: 100%; font-size: 12px;
       font-family: 'Noto Sans JP', sans-serif;
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 4px 8px;
-      text-align: right;
-      outline: none;
-      color: var(--text);
+      border-radius: 3px; padding: 4px 6px; outline: none;
+      color: var(--text); background: #fff;
+      transition: border-color 0.1s;
+    }
+    .item-table input:focus { border-color: #aaa; background: #fafafa; }
+    .item-table input.drop-input  { text-align: right; width: 70px; }
+    .item-table input.price-input { text-align: right; }
+
+    .item-table .expected {
+      text-align: right; padding: 4px 6px;
+      color: var(--text-light); font-size: 11px; white-space: nowrap;
     }
 
-    .hourly-result {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
+    /* 経費エリア */
+    .expense-area {
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
     }
-
-    .hourly-result span {
-      font-size: 18px;
+    .expense-field {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-light);
     }
+    .expense-field input {
+      width: 90px; font-size: 13px;
+      font-family: 'Noto Sans JP', sans-serif;
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 4px 8px; text-align: right; outline: none; color: var(--text);
+    }
+    .expense-field input:focus { border-color: #aaa; }
 
+    /* 時給結果行 */
+    .result-row {
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .hourly-result { font-size: 13px; font-weight: 700; color: var(--text); }
+    .hourly-result span { font-size: 18px; }
     .hourly-result.positive span { color: #2e7d32; }
     .hourly-result.negative span { color: #c62828; }
 
     @media (max-width: 768px) {
-      .page-hero { padding: 24px 20px; }
+      .page-hero  { padding: 24px 20px; }
       .sim-section { padding: 24px 20px; }
-      .sim-grid { grid-template-columns: 1fr; }
+      .sim-grid   { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -256,20 +170,18 @@
   <div class="page-hero">
     <div class="hero-tag">Simulator</div>
     <h1>MD金銭効率シミュレーター</h1>
-    <p>MD名・時間・ドロップ情報・必要経費を入力すると時給を自動計算します。</p>
+    <p>MD名・時間・ドロップ情報・経費を入力すると時給を自動計算します。</p>
   </div>
 
   <div class="sim-section">
     <div class="sim-grid" id="simGrid"></div>
   </div>
 
-  <footer>
-    © 2026 RO活動日記
-  </footer>
+  <footer>© 2026 RO活動日記</footer>
 
   <script>
     const CARD_COUNT = 10;
-    const ITEM_ROWS = 6;
+    const ITEM_ROWS  = 6;
 
     function formatZ(n) {
       if (isNaN(n) || !isFinite(n)) return '---';
@@ -277,42 +189,46 @@
     }
 
     function calcCard(card) {
-      const prepSec  = parseFloat(card.querySelector('.prep-sec').value)  || 0;
-      const sets     = parseFloat(card.querySelector('.sets').value)      || 0;
-      const setSec   = parseFloat(card.querySelector('.set-sec').value)   || 0;
-      const expense  = parseFloat(card.querySelector('.expense').value)   || 0;
+      const prepSec     = parseFloat(card.querySelector('.prep-sec').value)     || 0;
+      const sets        = parseFloat(card.querySelector('.sets').value)         || 0;
+      const setSec      = parseFloat(card.querySelector('.set-sec').value)      || 0;
+      const prepCost    = parseFloat(card.querySelector('.prep-cost').value)    || 0;
+      const setExpense  = parseFloat(card.querySelector('.set-expense').value)  || 0;
 
       const totalSec = prepSec + sets * setSec;
 
-      let expectedTotal = 0;
+      // アイテム期待値の合計（1セットあたり）
+      let expectedPerSet = 0;
       card.querySelectorAll('.item-row').forEach(row => {
         const drop  = parseFloat(row.querySelector('.drop-input').value)  || 0;
         const price = parseFloat(row.querySelector('.price-input').value) || 0;
         const exp   = (drop / 100) * price;
-        expectedTotal += exp;
+        expectedPerSet += exp;
         row.querySelector('.expected').textContent = exp > 0 ? formatZ(exp) : '';
       });
 
-      const totalExpected = expectedTotal * sets;
-      const hourly = totalSec > 0 ? (totalExpected / totalSec * 3600) - expense : null;
+      // 総収入 - 総経費
+      const totalIncome  = expectedPerSet * sets;
+      const totalExpense = prepCost + setExpense * sets;
+      const netIncome    = totalIncome - totalExpense;
+      const hourly       = totalSec > 0 ? netIncome / totalSec * 3600 : null;
 
-      // バッジ更新
-      const badge = card.querySelector('.result-badge');
+      const badge    = card.querySelector('.result-badge');
       const hourlyEl = card.querySelector('.hourly-result');
 
       if (hourly === null || totalSec === 0) {
-        badge.textContent = '未入力';
-        badge.className = 'result-badge neutral';
+        badge.textContent  = '未入力';
+        badge.className    = 'result-badge neutral';
         hourlyEl.innerHTML = '時給 <span>---</span>';
         hourlyEl.className = 'hourly-result';
       } else if (hourly >= 0) {
-        badge.textContent = '黒字';
-        badge.className = 'result-badge positive';
+        badge.textContent  = '黒字';
+        badge.className    = 'result-badge positive';
         hourlyEl.innerHTML = `時給 <span>${Math.round(hourly).toLocaleString()} z</span>`;
         hourlyEl.className = 'hourly-result positive';
       } else {
-        badge.textContent = '赤字';
-        badge.className = 'result-badge negative';
+        badge.textContent  = '赤字';
+        badge.className    = 'result-badge negative';
         hourlyEl.innerHTML = `時給 <span>${Math.round(hourly).toLocaleString()} z</span>`;
         hourlyEl.className = 'hourly-result negative';
       }
@@ -322,20 +238,20 @@
       const card = document.createElement('div');
       card.className = 'md-card';
 
-      // ヘッダー
       card.innerHTML = `
         <div class="md-card-header">
           <input class="md-name" type="text" placeholder="MD名を入力">
           <span class="result-badge neutral">未入力</span>
         </div>
         <div class="md-card-body">
+
           <div class="time-row">
             <div class="time-field">
-              準備 <input class="prep-sec" type="number" min="0" placeholder="0"> 秒
+              準備 <input class="prep-sec" type="number" placeholder="0"> 秒
             </div>
             <div class="time-field">
-              <input class="sets" type="number" min="1" placeholder="1"> セット ×
-              <input class="set-sec" type="number" min="0" placeholder="0"> 秒
+              <input class="sets" type="number" placeholder="1"> セット ×
+              <input class="set-sec" type="number" placeholder="0"> 秒
             </div>
           </div>
 
@@ -343,7 +259,7 @@
             <thead>
               <tr>
                 <th>アイテム名</th>
-                <th style="width:70px">ドロップ率%</th>
+                <th style="width:72px">ドロップ率%</th>
                 <th style="width:90px">金額 (z)</th>
                 <th style="width:80px">期待値/set</th>
               </tr>
@@ -352,24 +268,30 @@
               ${Array.from({length: ITEM_ROWS}, () => `
                 <tr class="item-row">
                   <td><input type="text" placeholder="アイテム名"></td>
-                  <td><input class="drop-input" type="number" min="0" max="100" step="0.01" placeholder="0.00"></td>
-                  <td><input class="price-input" type="number" min="0" placeholder="0"></td>
+                  <td><input class="drop-input" type="number" step="0.01" placeholder="0.00"></td>
+                  <td><input class="price-input" type="number" placeholder="0"></td>
                   <td class="expected"></td>
                 </tr>
               `).join('')}
             </tbody>
           </table>
 
-          <div class="summary-row">
+          <div class="expense-area">
             <div class="expense-field">
-              必要経費 <input class="expense" type="number" min="0" placeholder="0"> z/時
+              準備費用 <input class="prep-cost" type="number" placeholder="0"> z
             </div>
+            <div class="expense-field">
+              セット経費 <input class="set-expense" type="number" placeholder="0"> z × セット数
+            </div>
+          </div>
+
+          <div class="result-row">
             <div class="hourly-result">時給 <span>---</span></div>
           </div>
+
         </div>
       `;
 
-      // イベント：全inputの変更で再計算
       card.querySelectorAll('input').forEach(inp => {
         inp.addEventListener('input', () => calcCard(card));
       });
