@@ -230,7 +230,7 @@
   <footer>© 2026 RO活動日記</footer>
 
   <script>
-    const PAGE_SIZE   = 100;
+    const PAGE_SIZE   = 500;
     let allData       = {};   // { 'YYYY-MM-DD': [...] } 日付ごとのデータ
     let filtered      = [];
     let currentPage   = 1;
@@ -352,7 +352,7 @@
         if (!isNaN(qtyMax)   && r.count > qtyMax)   return false;
         if (!isNaN(refine)   && r.refine < refine)   return false;
         if (!isNaN(trans)    && r.trans  < trans)    return false;
-        if (name && !r.name.includes(name)) return false;
+        if (name && !r.name.includes(name) && ![r.card1, r.card2, r.card3, r.card4].some(c => c && c.includes(name))) return false;
         return true;
       });
 
