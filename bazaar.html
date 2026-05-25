@@ -234,8 +234,8 @@
     let allData       = {};   // { 'YYYY-MM-DD': [...] } 日付ごとのデータ
     let filtered      = [];
     let currentPage   = 1;
-    let sortCol       = '';
-    let sortDir       = 1;
+    let sortCol       = 'time';
+    let sortDir       = -1;
     let selectedDates = new Set(); // 選択中の日付セット
 
     // ---- 日付フォーマット ----
@@ -469,6 +469,9 @@
       const todayStr = formatDate(new Date());
       await loadDate(todayStr);
       buildSelects();
+      // デフォルトソート（時刻降順）のアイコンを表示
+      const timeTh = document.querySelector('thead th[data-col="time"]');
+      if (timeTh) timeTh.classList.add('sort-desc');
       applyFilter();
     }
 
