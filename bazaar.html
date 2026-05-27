@@ -473,27 +473,26 @@
           const transStr   = r.trans  > 0 ? `${r.trans}`   : '-';
           const countClass = r.count >= 2 ? 'td-count multi' : 'td-count';
 
-          const MAP_W = 284; const MAP_H = 365; const MAP_MAX_X = 284; const MAP_MAX_Y = 365;
-          const dotX = (r.x / MAP_MAX_X) * 100;
-          const dotY = (1 - r.y / MAP_MAX_Y) * 100;
+          const MAP_W = 284; const MAP_H = 365;
+          const MAP_MIN = 25; const MAP_MAX_X = 284; const MAP_MAX_Y = 365;
+          const RANGE_X = MAP_MAX_X - MAP_MIN;
+          const RANGE_Y = MAP_MAX_Y - MAP_MIN;
 
-          // line1: x=78, y=281～126 (縦線 1px)
-          const l1_x  = (78  / MAP_MAX_X * MAP_W).toFixed(1);
-          const l1_y  = ((1 - 281 / MAP_MAX_Y) * MAP_H).toFixed(1);
-          const l1_h  = ((281 - 126) / MAP_MAX_Y * MAP_H).toFixed(1);
+          // 座標をピクセル%に変換（25始まり補正）
+          const dotX = ((r.x - MAP_MIN) / RANGE_X * 100).toFixed(2);
+          const dotY = ((1 - (r.y - MAP_MIN) / RANGE_Y) * 100).toFixed(2);
+          const starX = ((146 - MAP_MIN) / RANGE_X * 100).toFixed(2);
+          const starY = ((1 - (89  - MAP_MIN) / RANGE_Y) * 100).toFixed(2);
 
-          // line2: x=78～233, y=126 (横線 1px)
-          const l2_x  = (78  / MAP_MAX_X * MAP_W).toFixed(1);
-          const l2_y  = ((1 - 126 / MAP_MAX_Y) * MAP_H).toFixed(1);
-          const l2_w  = ((233 - 78) / MAP_MAX_X * MAP_W).toFixed(1);
+          // ライン座標変換
+          const px = v => ((v - MAP_MIN) / RANGE_X * MAP_W).toFixed(1);
+          const py = v => ((1 - (v - MAP_MIN) / RANGE_Y) * MAP_H).toFixed(1);
 
-          // line3: x=233, y=281～126 (縦線 1px)
-          const l3_x  = (233 / MAP_MAX_X * MAP_W).toFixed(1);
-          const l3_y  = ((1 - 281 / MAP_MAX_Y) * MAP_H).toFixed(1);
-          const l3_h  = ((281 - 126)  / MAP_MAX_Y * MAP_H).toFixed(1);
+          const l1_x = px(78);  const l1_y = py(281); const l1_h = ((281-126)/RANGE_Y*MAP_H).toFixed(1);
+          const l2_x = px(78);  const l2_y = py(126); const l2_w = ((233-78)/RANGE_X*MAP_W).toFixed(1);
+          const l3_x = px(233); const l3_y = py(281); const l3_h = ((281-126)/RANGE_Y*MAP_H).toFixed(1);
 
-          const starX = (146 / MAP_MAX_X * 100).toFixed(2);
-          const starY = ((1 - 89 / MAP_MAX_Y) * 100).toFixed(2);
+          const showMap = (r.map === 'prontera');
           const mapPopupHtml = `<div class="map-popup">
                 <div class="guide-h"></div><div class="guide-v"></div>
                 <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
