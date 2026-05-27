@@ -464,25 +464,24 @@
           const transStr   = r.trans  > 0 ? `${r.trans}`   : '-';
           const countClass = r.count >= 2 ? 'td-count multi' : 'td-count';
 
-          const MAP_W = 284; const MAP_H = 365; const MAP_MAX = 500;
-          const dotX = (r.x / MAP_MAX) * 100;
-          const dotY = (1 - r.y / MAP_MAX) * 100;
+          const MAP_W = 284; const MAP_H = 365; const MAP_MAX_X = 284; const MAP_MAX_Y = 365;
+          const dotX = (r.x / MAP_MAX_X) * 100;
+          const dotY = (1 - r.y / MAP_MAX_Y) * 100;
 
           // line1: x=78, y=281～y=126 (縦線)
-          const l1_x  = (78  / MAP_MAX * MAP_W).toFixed(1);
-          const l1_y  = ((1 - 281 / MAP_MAX) * MAP_H).toFixed(1);
-          const l1_h  = ((281 - 126) / MAP_MAX * MAP_H).toFixed(1);
+          const l1_x  = (78  / MAP_MAX_X * MAP_W).toFixed(1);
+          const l1_y  = ((1 - 281 / MAP_MAX_Y) * MAP_H).toFixed(1);
+          const l1_h  = ((281 - 126) / MAP_MAX_Y * MAP_H).toFixed(1);
 
           // line2: x=78, y=126～y=233 (縦線)
-          const l2_x  = (78  / MAP_MAX * MAP_W).toFixed(1);
-          const l2_y  = ((1 - 126 / MAP_MAX) * MAP_H).toFixed(1);
-          const l2_h  = ((126 - 233) / MAP_MAX * MAP_H > 0 ? (126 - 233) : (233 - 126)).toFixed(1);
-          const l2_yf = ((1 - Math.max(126, 233) / MAP_MAX) * MAP_H).toFixed(1);
+          const l2_x  = (78  / MAP_MAX_X * MAP_W).toFixed(1);
+          const l2_yf = ((1 - 233 / MAP_MAX_Y) * MAP_H).toFixed(1);
+          const l2_h  = ((233 - 126) / MAP_MAX_Y * MAP_H).toFixed(1);
 
           // line3: x=233, y=281～y=78 (縦線)
-          const l3_x  = (233 / MAP_MAX * MAP_W).toFixed(1);
-          const l3_y  = ((1 - 281 / MAP_MAX) * MAP_H).toFixed(1);
-          const l3_h  = ((281 - 78)  / MAP_MAX * MAP_H).toFixed(1);
+          const l3_x  = (233 / MAP_MAX_X * MAP_W).toFixed(1);
+          const l3_y  = ((1 - 281 / MAP_MAX_Y) * MAP_H).toFixed(1);
+          const l3_h  = ((281 - 78)  / MAP_MAX_Y * MAP_H).toFixed(1);
 
           return `<tr class="data-row">
             <td class="td-time">${r.time}</td>
