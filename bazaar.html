@@ -87,6 +87,7 @@
     .td-name   { font-weight: 500; min-width: 160px; white-space: normal; }
     .td-price  { text-align: right; font-weight: 700; }
     .td-count  { text-align: right; }
+    .td-count.multi { color: #c0392b; font-weight: 700; }
     .td-center { text-align: center; }
     .td-badge  { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 700; }
     .badge-sell { background: #e3f2fd; color: #1565c0; }
@@ -96,6 +97,41 @@
     .card-pill { font-size: 10px; padding: 1px 5px; background: #f0f0f0; border-radius: 3px; color: #555; }
 
     .no-data { text-align: center; padding: 60px 0; color: var(--text-light); font-size: 14px; }
+
+    /* マップホバーポップアップ */
+    .map-cell { position: relative; cursor: default; }
+    .map-popup {
+      display: none;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -120%);
+      width: 284px; height: 365px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 4px;
+      z-index: 999;
+      pointer-events: none;
+    }
+    .map-popup .guide-h {
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 1px; background: rgba(255,255,255,0.6);
+      transform: translateY(-50%);
+    }
+    .map-popup .guide-v {
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 1px; background: rgba(255,255,255,0.6);
+      transform: translateX(-50%);
+    }
+    .map-popup .map-dot {
+      position: absolute;
+      width: 12px; height: 12px;
+      background: #e74c3c;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 4px rgba(0,0,0,0.8);
+    }
+    tr:hover .map-popup { display: block; }
 
     .pagination { display: flex; gap: 4px; margin-top: 16px; justify-content: center; flex-wrap: wrap; }
     .page-btn {
@@ -425,17 +461,28 @@
             : `<span class="td-badge badge-sell">露店</span>`;
           const refineStr = r.refine > 0 ? `+${r.refine}` : '-';
           const transStr  = r.trans  > 0 ? `${r.trans}`   : '-';
+          const countClass = r.count >= 2 ? 'td-count multi' : 'td-count';
+          // マップ上の座標をパーセントに変換（ROのマップは通常0-500範囲想定）
+          const MAP_MAX = 500;
+          const dotX = Math.min(Math.max((r.x / MAP_MAX) * 100, 0), 100);
+          const dotY = Math.min(Math.max((1 - r.y / MAP_MAX) * 100, 0), 100); // Y軸反転
           return `<tr>
             <td class="td-time">${r.time}</td>
             <td>${r.world ?? ''}</td>
-            <td>${r.map ?? ''}</td>
+            <td class="map-cell">${r.map ?? ''}
+              <div class="map-popup">
+                <div class="guide-h"></div>
+                <div class="guide-v"></div>
+                <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
+              </div>
+            </td>
             <td class="td-center">${r.x ?? ''}</td>
             <td class="td-center">${r.y ?? ''}</td>
             <td>${badge}</td>
             <td class="td-center">${refineStr}</td>
             <td class="td-center">${transStr}</td>
             <td class="td-name">${r.name}</td>
-            <td class="td-count">${r.count.toLocaleString()}</td>
+            <td class="${countClass}">${r.count.toLocaleString()}</td>
             <td class="td-price">${r.price.toLocaleString()}</td>
             <td>${cardHtml}</td>
           </tr>`;
@@ -462,6 +509,13 @@
       renderTable();
       window.scrollTo(0, 0);
     }
+
+    // ---- Enterキーで絞り込み ----
+    document.querySelectorAll('.filter-input').forEach(inp => {
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') applyFilter();
+      });
+    });
 
     // ---- 初期化 ----
     async function init() {
