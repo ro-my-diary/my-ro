@@ -128,6 +128,12 @@
       position: absolute;
       background: rgba(255,255,255,0.5);
     }
+    .map-popup .map-star {
+      position: absolute;
+      font-size: 12px;
+      transform: translate(-50%, -50%);
+      line-height: 1;
+    }
     .map-popup .map-dot {
       position: absolute;
       width: 12px; height: 12px;
@@ -486,34 +492,22 @@
           const l3_y  = ((1 - 281 / MAP_MAX_Y) * MAP_H).toFixed(1);
           const l3_h  = ((281 - 126)  / MAP_MAX_Y * MAP_H).toFixed(1);
 
-          const showMap = (r.map === 'prontera');
+          const starX = (146 / MAP_MAX_X * 100).toFixed(2);
+          const starY = ((1 - 89 / MAP_MAX_Y) * 100).toFixed(2);
+          const mapPopupHtml = `<div class="map-popup">
+                <div class="guide-h"></div><div class="guide-v"></div>
+                <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
+                <div class="guide-line" style="left:${l2_x}px;top:${l2_y}px;width:${l2_w}px;height:1px;"></div>
+                <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:1px;height:${l3_h}px;"></div>
+                <div class="map-star" style="left:${starX}%;top:${starY}%">☆</div>
+                <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
+              </div>`;
           return `<tr class="data-row">
             <td class="td-time">${r.time}</td>
             <td>${r.world ?? ''}</td>
-            <td class="map-cell">${r.map ?? ''}
-              ${showMap ? `<div class="map-popup">
-                <div class="guide-h"></div>
-                <div class="guide-v"></div>
-                <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
-                <div class="guide-line" style="left:${l2_x}px;top:${l2_y}px;width:${l2_w}px;height:1px;"></div>
-                <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:1px;height:${l3_h}px;"></div>
-                <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
-              </div>` : ''}
-            </td>
-            <td class="td-center map-cell">${r.x ?? ''}${showMap ? `<div class="map-popup">
-                <div class="guide-h"></div><div class="guide-v"></div>
-                <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
-                <div class="guide-line" style="left:${l2_x}px;top:${l2_y}px;width:${l2_w}px;height:1px;"></div>
-                <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:1px;height:${l3_h}px;"></div>
-                <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
-              </div>` : ''}</td>
-            <td class="td-center map-cell">${r.y ?? ''}${showMap ? `<div class="map-popup">
-                <div class="guide-h"></div><div class="guide-v"></div>
-                <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
-                <div class="guide-line" style="left:${l2_x}px;top:${l2_y}px;width:${l2_w}px;height:1px;"></div>
-                <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:1px;height:${l3_h}px;"></div>
-                <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
-              </div>` : ''}</td>
+            <td class="map-cell">${r.map ?? ''}${showMap ? mapPopupHtml : ''}</td>
+            <td class="td-center map-cell">${r.x ?? ''}${showMap ? mapPopupHtml : ''}</td>
+            <td class="td-center map-cell">${r.y ?? ''}${showMap ? mapPopupHtml : ''}</td>
             <td>${badge}</td>
             <td class="td-center">${refineStr}</td>
             <td class="td-center">${transStr}</td>
