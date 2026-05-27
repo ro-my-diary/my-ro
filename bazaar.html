@@ -460,38 +460,40 @@
           const badge = r.type === '買取露店'
             ? `<span class="td-badge badge-buy">買取</span>`
             : `<span class="td-badge badge-sell">露店</span>`;
-          const refineStr = r.refine > 0 ? `+${r.refine}` : '-';
-          const transStr  = r.trans  > 0 ? `${r.trans}`   : '-';
+          const refineStr  = r.refine > 0 ? `+${r.refine}` : '-';
+          const transStr   = r.trans  > 0 ? `${r.trans}`   : '-';
+          const countClass = r.count >= 2 ? 'td-count multi' : 'td-count';
+
           const MAP_W = 284; const MAP_H = 365; const MAP_MAX = 500;
           const dotX = (r.x / MAP_MAX) * 100;
           const dotY = (1 - r.y / MAP_MAX) * 100;
 
-          // 追加ライン（実座標→ピクセル変換）
-          // x78,y281～x78,y126 : 縦線 x=78, y=126～281
-          // x78,y126～x78,y233 : 縦線 x=78, y=126～233 ※上と連続なので1本でまとめ
-          // x233,y281～x233,y78: 縦線 x=233, y=78～281
-          const toP = (v) => (v / MAP_MAX * 100).toFixed(2);
-          const toPI = (v) => ((1 - v / MAP_MAX) * 100).toFixed(2);
+          // line1: x=78, y=281～y=126 (縦線)
+          const l1_x  = (78  / MAP_MAX * MAP_W).toFixed(1);
+          const l1_y  = ((1 - 281 / MAP_MAX) * MAP_H).toFixed(1);
+          const l1_h  = ((281 - 126) / MAP_MAX * MAP_H).toFixed(1);
 
-          // line1: x=78, y=126～281 (縦線)
-          const l1_x = (78 / MAP_MAX * MAP_W).toFixed(1);
-          const l1_y1 = ((1 - 281 / MAP_MAX) * MAP_H).toFixed(1);
-          const l1_h = ((281 - 126) / MAP_MAX * MAP_H).toFixed(1);
+          // line2: x=78, y=126～y=233 (縦線)
+          const l2_x  = (78  / MAP_MAX * MAP_W).toFixed(1);
+          const l2_y  = ((1 - 126 / MAP_MAX) * MAP_H).toFixed(1);
+          const l2_h  = ((126 - 233) / MAP_MAX * MAP_H > 0 ? (126 - 233) : (233 - 126)).toFixed(1);
+          const l2_yf = ((1 - Math.max(126, 233) / MAP_MAX) * MAP_H).toFixed(1);
 
-          // line2: x=233, y=78～281 (縦線)
-          const l2_x = (233 / MAP_MAX * MAP_W).toFixed(1);
-          const l2_y1 = ((1 - 281 / MAP_MAX) * MAP_H).toFixed(1);
-          const l2_h = ((281 - 78) / MAP_MAX * MAP_H).toFixed(1);
+          // line3: x=233, y=281～y=78 (縦線)
+          const l3_x  = (233 / MAP_MAX * MAP_W).toFixed(1);
+          const l3_y  = ((1 - 281 / MAP_MAX) * MAP_H).toFixed(1);
+          const l3_h  = ((281 - 78)  / MAP_MAX * MAP_H).toFixed(1);
 
           return `<tr class="data-row">
             <td class="td-time">${r.time}</td>
             <td>${r.world ?? ''}</td>
-            <td class="map-cell" data-x="${r.x}" data-y="${r.y}">${r.map ?? ''}
+            <td class="map-cell">${r.map ?? ''}
               <div class="map-popup">
                 <div class="guide-h"></div>
                 <div class="guide-v"></div>
-                <div class="guide-line" style="left:${l1_x}px;top:${l1_y1}px;width:1px;height:${l1_h}px;"></div>
-                <div class="guide-line" style="left:${l2_x}px;top:${l2_y1}px;width:1px;height:${l2_h}px;"></div>
+                <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
+                <div class="guide-line" style="left:${l2_x}px;top:${l2_yf}px;width:1px;height:${l2_h}px;"></div>
+                <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:1px;height:${l3_h}px;"></div>
                 <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
               </div>
             </td>
