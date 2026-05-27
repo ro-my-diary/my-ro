@@ -112,14 +112,17 @@
     .map-popup .guide-h {
       position: absolute;
       top: 50%; left: 0; right: 0;
-      height: 1px; background: rgba(255,255,255,0.6);
-      transform: translateY(-50%);
+      background: rgba(255,255,255,0.6);
+      height: 7px;
+      margin-top: -3px; /* 200〜207px = 中心203.5 */
+      top: calc(200 / 365 * 100%);
     }
     .map-popup .guide-v {
       position: absolute;
-      left: 50%; top: 0; bottom: 0;
-      width: 1px; background: rgba(255,255,255,0.6);
-      transform: translateX(-50%);
+      left: calc(149 / 284 * 100%);
+      width: 13px;
+      top: 0; bottom: 0;
+      background: rgba(255,255,255,0.6);
     }
     .map-popup .guide-line {
       position: absolute;
@@ -468,33 +471,34 @@
           const dotX = (r.x / MAP_MAX_X) * 100;
           const dotY = (1 - r.y / MAP_MAX_Y) * 100;
 
-          // line1: x=78, y=281～y=126 (縦線)
+          // line1: x=78, y=281～126 (縦線 1px)
           const l1_x  = (78  / MAP_MAX_X * MAP_W).toFixed(1);
           const l1_y  = ((1 - 281 / MAP_MAX_Y) * MAP_H).toFixed(1);
           const l1_h  = ((281 - 126) / MAP_MAX_Y * MAP_H).toFixed(1);
 
-          // line2: x=78, y=126～y=233 (縦線)
+          // line2: x=78～233, y=126 (横線 1px)
           const l2_x  = (78  / MAP_MAX_X * MAP_W).toFixed(1);
-          const l2_yf = ((1 - 233 / MAP_MAX_Y) * MAP_H).toFixed(1);
-          const l2_h  = ((233 - 126) / MAP_MAX_Y * MAP_H).toFixed(1);
+          const l2_y  = ((1 - 126 / MAP_MAX_Y) * MAP_H).toFixed(1);
+          const l2_w  = ((233 - 78) / MAP_MAX_X * MAP_W).toFixed(1);
 
-          // line3: x=233, y=281～y=78 (縦線)
+          // line3: x=233, y=281～78 (縦線 1px)
           const l3_x  = (233 / MAP_MAX_X * MAP_W).toFixed(1);
           const l3_y  = ((1 - 281 / MAP_MAX_Y) * MAP_H).toFixed(1);
           const l3_h  = ((281 - 78)  / MAP_MAX_Y * MAP_H).toFixed(1);
 
+          const showMap = (r.map === 'prontera');
           return `<tr class="data-row">
             <td class="td-time">${r.time}</td>
             <td>${r.world ?? ''}</td>
             <td class="map-cell">${r.map ?? ''}
-              <div class="map-popup">
+              ${showMap ? `<div class="map-popup">
                 <div class="guide-h"></div>
                 <div class="guide-v"></div>
                 <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
-                <div class="guide-line" style="left:${l2_x}px;top:${l2_yf}px;width:1px;height:${l2_h}px;"></div>
+                <div class="guide-line" style="left:${l2_x}px;top:${l2_y}px;width:${l2_w}px;height:1px;"></div>
                 <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:1px;height:${l3_h}px;"></div>
                 <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
-              </div>
+              </div>` : ''}
             </td>
             <td class="td-center">${r.x ?? ''}</td>
             <td class="td-center">${r.y ?? ''}</td>
