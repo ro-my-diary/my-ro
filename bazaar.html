@@ -474,19 +474,18 @@
           const countClass = r.count >= 2 ? 'td-count multi' : 'td-count';
 
           const MAP_W = 284; const MAP_H = 365;
-          const MAP_MIN = 25; const MAP_MAX_X = 284; const MAP_MAX_Y = 365;
-          const RANGE_X = MAP_MAX_X - MAP_MIN;
-          const RANGE_Y = MAP_MAX_Y - MAP_MIN;
+          const MAP_MAX_X = 284; const MAP_MAX_Y = 365;
+          const OFFSET = 25;
 
-          // 座標をピクセル%に変換（25始まり補正）
-          const dotX = ((r.x - MAP_MIN) / RANGE_X * 100).toFixed(2);
-          const dotY = ((1 - (r.y - MAP_MIN) / RANGE_Y) * 100).toFixed(2);
-          const starX = ((146 - MAP_MIN) / RANGE_X * 100).toFixed(2);
-          const starY = ((1 - (89  - MAP_MIN) / RANGE_Y) * 100).toFixed(2);
+          // 座標をピクセル%に変換（+25オフセット）
+          const dotX = ((r.x + OFFSET) / MAP_MAX_X * 100).toFixed(2);
+          const dotY = ((1 - (r.y + OFFSET) / MAP_MAX_Y) * 100).toFixed(2);
+          const starX = ((146 + OFFSET) / MAP_MAX_X * 100).toFixed(2);
+          const starY = ((1 - (89  + OFFSET) / MAP_MAX_Y) * 100).toFixed(2);
 
           // ライン座標変換
-          const px = v => ((v - MAP_MIN) / RANGE_X * MAP_W).toFixed(1);
-          const py = v => ((1 - (v - MAP_MIN) / RANGE_Y) * MAP_H).toFixed(1);
+          const px = v => ((v + OFFSET) / MAP_MAX_X * MAP_W).toFixed(1);
+          const py = v => ((1 - (v + OFFSET) / MAP_MAX_Y) * MAP_H).toFixed(1);
 
           const l1_x = px(78);  const l1_y = py(281); const l1_h = ((281-126)/RANGE_Y*MAP_H).toFixed(1);
           const l2_x = px(78);  const l2_y = py(126); const l2_w = ((233-78)/RANGE_X*MAP_W).toFixed(1);
