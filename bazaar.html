@@ -484,16 +484,19 @@
           const px = v => (v / MAP_MAX_X * MAP_W).toFixed(1);
           const py = v => ((1 - v / MAP_MAX_Y) * MAP_H).toFixed(1);
 
-          const l1_x = px(78);  const l1_y = py(281); const l1_h = ((281-126)/MAP_MAX_Y*MAP_H).toFixed(1);
-          const l2_x = px(78);  const l2_y = py(126); const l2_w = ((233-78)/MAP_MAX_X*MAP_W).toFixed(1);
-          const l3_x = px(233); const l3_y = py(281); const l3_h = ((281-126)/MAP_MAX_Y*MAP_H).toFixed(1);
+          // line1: x=68～78, y=281～126 (縦 幅10px)
+          const l1_x = px(68); const l1_y = py(281); const l1_h = ((281-126)/MAP_MAX_Y*MAP_H).toFixed(1); const l1_w = ((78-68)/MAP_MAX_X*MAP_W).toFixed(1);
+          // line2: x=78～233, y=112～126 (横 高さ14px)
+          const l2_x = px(78); const l2_y = py(126); const l2_w = ((233-78)/MAP_MAX_X*MAP_W).toFixed(1); const l2_h2 = ((126-112)/MAP_MAX_Y*MAP_H).toFixed(1);
+          // line3: x=233～243, y=281～126 (縦 幅10px)
+          const l3_x = px(233); const l3_y = py(281); const l3_h = ((281-126)/MAP_MAX_Y*MAP_H).toFixed(1); const l3_w = ((243-233)/MAP_MAX_X*MAP_W).toFixed(1);
 
           const showMap = (r.map === 'prontera');
           const mapPopupHtml = `<div class="map-popup">
                 <div class="guide-h"></div><div class="guide-v"></div>
-                <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
-                <div class="guide-line" style="left:${l2_x}px;top:${l2_y}px;width:${l2_w}px;height:1px;"></div>
-                <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:1px;height:${l3_h}px;"></div>
+                <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:${l1_w}px;height:${l1_h}px;"></div>
+                <div class="guide-line" style="left:${l2_x}px;top:${l2_y}px;width:${l2_w}px;height:${l2_h2}px;"></div>
+                <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:${l3_w}px;height:${l3_h}px;"></div>
                 <div class="map-star" style="left:${starX}%;top:${starY}%;color:white;">★</div>
                 <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
               </div>`;
