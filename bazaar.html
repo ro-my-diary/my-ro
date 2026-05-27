@@ -481,10 +481,10 @@
           const l2_y  = ((1 - 126 / MAP_MAX_Y) * MAP_H).toFixed(1);
           const l2_w  = ((233 - 78) / MAP_MAX_X * MAP_W).toFixed(1);
 
-          // line3: x=233, y=281～78 (縦線 1px)
+          // line3: x=233, y=281～126 (縦線 1px)
           const l3_x  = (233 / MAP_MAX_X * MAP_W).toFixed(1);
           const l3_y  = ((1 - 281 / MAP_MAX_Y) * MAP_H).toFixed(1);
-          const l3_h  = ((281 - 78)  / MAP_MAX_Y * MAP_H).toFixed(1);
+          const l3_h  = ((281 - 126)  / MAP_MAX_Y * MAP_H).toFixed(1);
 
           const showMap = (r.map === 'prontera');
           return `<tr class="data-row">
@@ -500,8 +500,20 @@
                 <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
               </div>` : ''}
             </td>
-            <td class="td-center">${r.x ?? ''}</td>
-            <td class="td-center">${r.y ?? ''}</td>
+            <td class="td-center map-cell">${r.x ?? ''}${showMap ? `<div class="map-popup">
+                <div class="guide-h"></div><div class="guide-v"></div>
+                <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
+                <div class="guide-line" style="left:${l2_x}px;top:${l2_y}px;width:${l2_w}px;height:1px;"></div>
+                <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:1px;height:${l3_h}px;"></div>
+                <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
+              </div>` : ''}</td>
+            <td class="td-center map-cell">${r.y ?? ''}${showMap ? `<div class="map-popup">
+                <div class="guide-h"></div><div class="guide-v"></div>
+                <div class="guide-line" style="left:${l1_x}px;top:${l1_y}px;width:1px;height:${l1_h}px;"></div>
+                <div class="guide-line" style="left:${l2_x}px;top:${l2_y}px;width:${l2_w}px;height:1px;"></div>
+                <div class="guide-line" style="left:${l3_x}px;top:${l3_y}px;width:1px;height:${l3_h}px;"></div>
+                <div class="map-dot" style="left:${dotX}%;top:${dotY}%"></div>
+              </div>` : ''}</td>
             <td>${badge}</td>
             <td class="td-center">${refineStr}</td>
             <td class="td-center">${transStr}</td>
