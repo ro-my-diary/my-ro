@@ -487,9 +487,9 @@
           const px = v => ((v + OFFSET) / MAP_MAX_X * MAP_W).toFixed(1);
           const py = v => ((1 - (v + OFFSET) / MAP_MAX_Y) * MAP_H).toFixed(1);
 
-          const l1_x = px(78);  const l1_y = py(281); const l1_h = ((281-126)/RANGE_Y*MAP_H).toFixed(1);
-          const l2_x = px(78);  const l2_y = py(126); const l2_w = ((233-78)/RANGE_X*MAP_W).toFixed(1);
-          const l3_x = px(233); const l3_y = py(281); const l3_h = ((281-126)/RANGE_Y*MAP_H).toFixed(1);
+          const l1_x = px(78);  const l1_y = py(281); const l1_h = ((281-126)/MAP_MAX_Y*MAP_H).toFixed(1);
+          const l2_x = px(78);  const l2_y = py(126); const l2_w = ((233-78)/MAP_MAX_X*MAP_W).toFixed(1);
+          const l3_x = px(233); const l3_y = py(281); const l3_h = ((281-126)/MAP_MAX_Y*MAP_H).toFixed(1);
 
           const showMap = (r.map === 'prontera');
           const mapPopupHtml = `<div class="map-popup">
