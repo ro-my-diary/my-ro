@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>キャラクター集計 - RO活動日記</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero { padding: 40px 40px 32px; max-width: 900px; margin: 0 auto; border-bottom: 1px solid var(--border); }
+    .page-hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .page-hero p  { font-size: 13px; color: var(--text-light); line-height: 1.8; }
+
+    .content { max-width: 900px; margin: 0 auto; padding: 32px 40px 48px; }
+    .lead { font-size: 14px; color: var(--text); line-height: 1.9; margin-bottom: 8px; }
+
+    .step-label {
+      font-size: 11px; letter-spacing: 0.15em; color: var(--accent);
+      text-transform: uppercase; font-weight: 500;
+      margin: 36px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    .step-label:first-of-type { margin-top: 24px; }
+
+    .content p { font-size: 13px; color: var(--text); line-height: 1.9; margin: 10px 0; }
+    .content strong { font-weight: 700; }
+    .content ol { margin: 12px 0; padding-left: 22px; }
+    .content ol li { font-size: 13px; line-height: 1.9; margin: 8px 0; }
+
+    code {
+      background: #f7f7f7; border: 1px solid var(--border);
+      padding: 1px 6px; border-radius: 3px; font-size: 12px;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+    }
+
+    .note {
+      background: var(--card-hover); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 14px 16px; border-radius: 0 4px 4px 0;
+      font-size: 13px; line-height: 1.8; color: var(--text-light); margin: 16px 0;
+    }
+    .badge {
+      display: inline-block; background: var(--accent); color: #fff;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+      padding: 2px 8px; border-radius: 3px; margin-right: 8px; vertical-align: middle;
+    }
+    .warn {
+      background: #fafafa; border: 1px solid var(--border);
+      padding: 16px 18px; border-radius: 4px;
+      font-size: 12px; line-height: 1.9; color: var(--text-light); margin: 16px 0;
+    }
+    .warn strong { color: var(--text); }
+
+    .install {
+      text-align: center; margin: 18px 0;
+      background: var(--card-hover); border: 1px dashed var(--border);
+      border-radius: 6px; padding: 32px 24px;
+    }
+    .bm-btn {
+      display: inline-block; text-decoration: none; cursor: grab;
+      font-size: 15px; font-weight: 700; color: #fff; background: var(--accent);
+      border-radius: 5px; padding: 13px 32px;
+      box-shadow: 0 2px 8px rgba(192,57,43,0.25);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .bm-btn:hover { box-shadow: 0 4px 12px rgba(192,57,43,0.35); }
+    .bm-btn:active { transform: translateY(2px); box-shadow: 0 1px 4px rgba(192,57,43,0.25); }
+    .hint { font-size: 12px; color: var(--text-light); margin-top: 16px; }
+
+    .fallback { margin-top: 20px; font-size: 12px; color: var(--text-light); }
+    .fallback textarea {
+      width: 100%; height: 70px; margin-top: 8px; font-size: 11px;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      border: 1px solid var(--border); border-radius: 4px; padding: 8px;
+      background: #fff; color: var(--text); resize: vertical;
+    }
+
+    .figure {
+      margin: 16px 0; padding: 16px;
+      background: var(--card-hover); border: 1px solid var(--border);
+      border-radius: 6px; text-align: center;
+    }
+    .figure img {
+      max-width: 280px; width: 100%; height: auto;
+      border: 1px solid var(--border); border-radius: 4px; display: block; margin: 0 auto;
+    }
+    .figure figcaption { font-size: 12px; color: var(--text-light); line-height: 1.7; margin-top: 10px; }
+    .figure figcaption strong { color: var(--accent); font-weight: 700; }
+
+    /* 取得項目の一覧表示 */
+    .fields { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+    .field-chip {
+      font-size: 12px; padding: 4px 10px; border: 1px solid var(--border);
+      border-radius: 20px; background: #fff; color: var(--text-light);
+    }
+
+    table.demo { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12px; }
+    table.demo th, table.demo td { border: 1px solid var(--border); padding: 6px 9px; text-align: center; white-space: nowrap; }
+    table.demo th { background: #f7f7f7; font-weight: 700; }
+    .demo-wrap { overflow-x: auto; }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 24px 20px; }
+      .content { padding: 24px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="site-title" href="index.html">RO<span>活動</span>日記</a>
+    <nav>
+      <a href="bazaar.html">露店巡り</a>
+      <a href="md-sim.html">MD金銭効率</a>
+      <a href="enchant.html">エンチャまとめ</a>
+      <a class="disabled">工事中①</a>
+      <a class="disabled">工事中②</a>
+      <a class="disabled">工事中③</a>
+      <a href="apps.html" style="color:var(--accent)">活用アプリ</a>
+      <a href="diary.html">日記</a>
+    </nav>
+  </header>
+
+  <div class="page-hero">
+    <div class="hero-tag">Bookmarklet</div>
+    <h1>キャラクター集計ブックマークレット</h1>
+    <p>全キャラのステータスや所持金などを、選んだ項目だけまとめてCSV出力できるブックマークレットツールです。</p>
+  </div>
+
+  <div class="content">
+
+    <p class="lead">ガンホー公式の<strong>キャラクター連動ページ</strong>を1キャラずつ開いて記録していくと、各キャラの情報を一覧化した CSV を出力できる道具です。出力したい項目はチェックで自由に選べます。データはすべてあなたのブラウザ内だけで処理され、外部には一切送信されません。</p>
+
+    <div class="note">
+      <span class="badge">SAFE</span>自分のアカウントの、自分の表示中ページを読み取るだけ。サーバーへの自動アクセス（自動巡回）は行いません。ページは必ずご自身で開いてから実行してください。
+    </div>
+
+    <div class="step-label">① 導入する</div>
+    <p>下のボタンを<strong>ブックマークバーにドラッグ＆ドロップ</strong>してください。これだけで導入完了です。</p>
+    <div class="install">
+      <a class="bm-btn" href="javascript:!function()%7B%22use%20strict%22%3Bvar%20t%3D%22ro_char_data_v1%22%2Ce%3D%22roCharPanel%22%2Cn%3D%5B%22%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E5%90%8D%22%2C%22%E3%82%B9%E3%83%AD%E3%83%83%E3%83%88%E7%95%AA%E5%8F%B7%22%2C%22%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%90%8D%22%2C%22%E8%81%B7%E6%A5%AD%22%5D%2Co%3D%5B%22BaseLv%E3%82%A2%E3%83%83%E3%83%97%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%B5%8C%E9%A8%93%E5%80%A4%22%2C%22JobLv%E3%82%A2%E3%83%83%E3%83%97%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%B5%8C%E9%A8%93%E5%80%A4%22%2C%22%E6%89%80%E6%8C%81%E9%87%91%22%2C%22%E6%89%80%E5%B1%9E%E3%82%AE%E3%83%AB%E3%83%89%22%2C%22%E7%8F%BE%E5%9C%A8%E3%83%9E%E3%83%83%E3%83%97%22%2C%22%E3%82%BB%E3%83%BC%E3%83%96%E3%83%9E%E3%83%83%E3%83%97%22%5D%2Ca%3D%5B%22BaseLv%22%2C%22JobLv%22%2C%22MaxHP%22%2C%22MaxSP%22%2C%22StatusPoint%22%2C%22SkillPoint%22%2C%22T.StatusPoint%22%2C%22Str%22%2C%22Agi%22%2C%22Vit%22%2C%22Int%22%2C%22Dex%22%2C%22Luk%22%2C%22Pow%22%2C%22Sta%22%2C%22Wis%22%2C%22Spl%22%2C%22Con%22%2C%22Crt%22%5D%3Bfunction%20r()%7Btry%7Bvar%20e%3DlocalStorage.getItem(t)%3Breturn%20e%3FJSON.parse(e)%3A%7B%7D%7Dcatch(t)%7Breturn%7B%7D%7D%7Dfunction%20i(t)%7Breturn%20String(t).replace(%2F%5B%26%3C%3E%22%5D%2Fg%2Cfunction(t)%7Breturn%7B%22%26%22%3A%22%26amp%3B%22%2C%22%3C%22%3A%22%26lt%3B%22%2C%22%3E%22%3A%22%26gt%3B%22%2C'%22'%3A%22%26quot%3B%22%7D%5Bt%5D%7D)%7Dfunction%20c(t)%7Breturn%20t%3DString(null%3D%3Dt%3F%22%22%3At)%2C%2F%5B%22%2C%5Cn%5D%2F.test(t)%3F'%22'%2Bt.replace(%2F%22%2Fg%2C'%22%22')%2B'%22'%3At%7Dfunction%20s()%7Bvar%20e%3Dfunction()%7Bvar%20t%3D%7Bbase%3A%7B%7D%2Cinfo%3A%7B%7D%2Cstatus%3A%7B%7D%7D%3Bfunction%20e(t%2Ce)%7Bvar%20n%3Ddocument.querySelector(t)%3Bn%26%26n.querySelectorAll(%22tr%22).forEach(function(t)%7Bfor(var%20n%3Dt.children%2Co%3D0%3Bo%3Cn.length-1%3Bo%2B%2B)if(%22TH%22%3D%3D%3Dn%5Bo%5D.tagName%26%26%22TD%22%3D%3D%3Dn%5Bo%2B1%5D.tagName)%7Bvar%20a%3Dn%5Bo%5D.textContent.trim()%2Cr%3Dn%5Bo%2B1%5D.textContent.trim()%3Ba%26%26(e%5Ba%5D%3Dr)%2Co%2B%2B%7D%7D)%7Dreturn%20e(%22section.userDate%20.base%22%2Ct.base)%2Ce(%22section.userDate%20.info%22%2Ct.info)%2Ce(%22section.userDate%20.status%22%2Ct.status)%2Ct%7D()%2Cn%3De.base%5B%22%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E5%90%8D%22%5D%3Bif(n)%7Bvar%20o%3Dr()%3Bo%5Bfunction(t)%7Bvar%20e%3Dlocation.pathname.match(%2F%5C%2F(%5Cd%2B)%5C%2F(%5Cd%2B)%2F)%3Breturn(e%3Fe%5B1%5D%3A%22%22)%2B%22%2F%22%2B(e%3Fe%5B2%5D%3At.base%5B%22%E3%82%B9%E3%83%AD%E3%83%83%E3%83%88%E7%95%AA%E5%8F%B7%22%5D%7C%7C%22%22)%7D(e)%5D%3D%7Bbase%3Ae.base%2Cinfo%3Ae.info%2Cstatus%3Ae.status%2CcapturedAt%3A(new%20Date).toISOString()%7D%2Cfunction(e)%7Btry%7BlocalStorage.setItem(t%2CJSON.stringify(e))%7Dcatch(t)%7Balert(%22%E4%BF%9D%E5%AD%98%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%3A%20%22%2Bt.message)%7D%7D(o)%2Cm(%22%E3%80%8C%22%2Bn%2B%22%E3%80%8D%E3%82%92%E8%A8%98%E9%8C%B2%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%22)%7Delse%20alert(%22%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E6%83%85%E5%A0%B1%E3%81%8C%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F%E3%80%82%5Cn%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E9%80%A3%E5%8B%95%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E9%96%8B%E3%81%84%E3%81%A6%E3%81%8B%E3%82%89%E5%AE%9F%E8%A1%8C%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82%22)%7Dfunction%20u()%7Bvar%20t%3Dr()%2Ce%3DObject.keys(t)%3Bif(0%3D%3D%3De.length)return%20alert(%22%E3%81%BE%E3%81%A0%E8%A8%98%E9%8C%B2%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%80%82%22)%2Cnull%3Bvar%20i%3Dfunction()%7Bvar%20t%3D%7Bbase%3A%5B%5D%2Cinfo%3A%5B%5D%2Cstatus%3A!1%7D%3Bn.forEach(function(e)%7Bvar%20n%3Ddocument.getElementById(%22rc_b_%22%2Be)%3Bn%26%26n.checked%26%26t.base.push(e)%7D)%2Co.forEach(function(e)%7Bvar%20n%3Ddocument.getElementById(%22rc_i_%22%2Be)%3Bn%26%26n.checked%26%26t.info.push(e)%7D)%3Bvar%20e%3Ddocument.getElementById(%22rc_status%22)%3Breturn%20t.status%3D!!e%26%26e.checked%2Ct%7D()%2Cs%3D%5B%5D%3Bif(i.base.forEach(function(t)%7Bs.push(t)%7D)%2Ci.info.forEach(function(t)%7Bs.push(t)%7D)%2Ci.status%26%26a.forEach(function(t)%7Bs.push(t)%7D)%2C0%3D%3D%3Ds.length)return%20alert(%22%E5%87%BA%E5%8A%9B%E3%81%99%E3%82%8B%E9%A0%85%E7%9B%AE%E3%81%8C%E9%81%B8%E6%8A%9E%E3%81%95%E3%82%8C%E3%81%A6%E3%81%84%E3%81%BE%E3%81%9B%E3%82%93%E3%80%82%22)%2Cnull%3Bvar%20u%3D%5Bs.map(c).join(%22%2C%22)%5D%3Breturn%20e.forEach(function(e)%7Bvar%20n%3Dt%5Be%5D%2Co%3D%5B%5D%3Bi.base.forEach(function(t)%7Bo.push(n.base%5Bt%5D%7C%7C%22%22)%7D)%2Ci.info.forEach(function(t)%7Bo.push(n.info%5Bt%5D%7C%7C%22%22)%7D)%2Ci.status%26%26a.forEach(function(t)%7Bo.push(n.status%5Bt%5D%7C%7C%22%22)%7D)%2Cu.push(o.map(c).join(%22%2C%22))%7D)%2Cu.join(%22%5Cr%5Cn%22)%7Dfunction%20d()%7Bvar%20t%3Du()%3Bif(null!%3D%3Dt)%7Bvar%20e%3D(new%20Date).toISOString().slice(0%2C10)%2Cn%3Dnew%20Blob(%5B%22%5Cufeff%22%2Ct%5D%2C%7Btype%3A%22text%2Fcsv%3Bcharset%3Dutf-8%22%7D)%2Co%3DURL.createObjectURL(n)%2Ca%3Ddocument.createElement(%22a%22)%3Ba.href%3Do%2Ca.download%3D%22ro_char_%22%2Be%2B%22.csv%22%2Cdocument.body.appendChild(a)%2Ca.click()%2CsetTimeout(function()%7Bdocument.body.removeChild(a)%2CURL.revokeObjectURL(o)%7D%2C100)%7D%7Dfunction%20l()%7Bconfirm(%22%E8%A8%98%E9%8C%B2%E3%81%97%E3%81%9F%E5%85%A8%E3%82%AD%E3%83%A3%E3%83%A9%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E3%82%92%E6%B6%88%E5%8E%BB%E3%81%97%E3%81%BE%E3%81%99%E3%80%82%E3%82%88%E3%82%8D%E3%81%97%E3%81%84%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F%22)%26%26(localStorage.removeItem(t)%2Cm(%22%E8%A8%98%E9%8C%B2%E3%82%92%E3%81%99%E3%81%B9%E3%81%A6%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%22))%7Dfunction%20p(t%2Ce)%7Breturn%22width%3A100%25%3Bpadding%3A7px%200%3Bborder%3Anone%3Bborder-radius%3A6px%3Bcursor%3Apointer%3Bfont-weight%3Abold%3Bfont-size%3A12px%3Bbackground%3A%22%2Bt%2B%22%3Bcolor%3A%22%2Be%2B%22%3B%22%7Dfunction%20f(t%2Ce%2Cn)%7Breturn'%3Clabel%20style%3D%22display%3Ablock%3Bfont-size%3A12px%3Bpadding%3A2px%200%3Bcursor%3Apointer%3B%22%3E%3Cinput%20type%3D%22checkbox%22%20id%3D%22'%2Bt%2B'%22'%2B(n%3F%22%20checked%22%3A%22%22)%2B'%20style%3D%22margin-right%3A6px%3Bvertical-align%3Amiddle%3B%22%3E'%2Bi(e)%2B%22%3C%2Flabel%3E%22%7Dfunction%20m(t)%7Bvar%20a%3Dr()%2Cc%3DObject.keys(a)%2Cu%3Ddocument.getElementById(e)%3Bu%26%26u.remove()%3Bvar%20m%3Ddocument.createElement(%22div%22)%3Bm.id%3De%2Cm.style.cssText%3D%5B%22position%3Afixed%22%2C%22top%3A12px%22%2C%22right%3A12px%22%2C%22z-index%3A999999%22%2C%22width%3A300px%22%2C%22max-height%3A90vh%22%2C%22overflow%3Aauto%22%2C%22background%3A%231a1410%22%2C%22color%3A%23f3e9d8%22%2C%22border%3A1px%20solid%20%23c9a25a%22%2C%22border-radius%3A10px%22%2C%22box-shadow%3A0%208px%2028px%20rgba(0%2C0%2C0%2C.45)%22%2C'font-family%3A%22Hiragino%20Kaku%20Gothic%20ProN%22%2Csystem-ui%2Csans-serif'%2C%22font-size%3A13px%22%5D.join(%22%3B%22)%3Bvar%20g%3Dc.map(function(t)%7Bvar%20e%3Da%5Bt%5D%3Breturn'%3Cli%20style%3D%22padding%3A2px%200%3Bborder-bottom%3A1px%20dotted%20%234a3c28%22%3E%3Cb%3E'%2Bi(e.base%5B%22%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E5%90%8D%22%5D%7C%7C%22%3F%22)%2B'%3C%2Fb%3E%20%3Cspan%20style%3D%22opacity%3A.7%22%3E'%2Bi(e.base%5B%22%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%90%8D%22%5D%7C%7C%22%22)%2B%22%3C%2Fspan%3E%3C%2Fli%3E%22%7D).join(%22%22)%2Cv%3Dn.map(function(t)%7Breturn%20f(%22rc_b_%22%2Bt%2Ct%2C!0)%7D).join(%22%22)%2Cx%3Do.map(function(t)%7Breturn%20f(%22rc_i_%22%2Bt%2Ct%2C!0)%7D).join(%22%22)%2Ch%3Df(%22rc_status%22%2C%22%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%EF%BC%88BaseLv%E3%80%9CCrt%EF%BC%89%22%2C!0)%3Bm.innerHTML%3D'%3Cdiv%20style%3D%22background%3A%232a1f15%3Bpadding%3A8px%2012px%3Bfont-weight%3Abold%3Bborder-bottom%3A1px%20solid%20%23c9a25a%3Bdisplay%3Aflex%3Bjustify-content%3Aspace-between%3Balign-items%3Acenter%22%3E%3Cspan%3ERO%20%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E9%9B%86%E8%A8%88%3C%2Fspan%3E%3Cspan%20id%3D%22rcClose%22%20style%3D%22cursor%3Apointer%3Bopacity%3A.7%22%3E%C3%97%3C%2Fspan%3E%3C%2Fdiv%3E%3Cdiv%20style%3D%22padding%3A10px%2012px%22%3E'%2B(t%3F'%3Cdiv%20style%3D%22background%3A%233a2e1c%3Bborder-radius%3A6px%3Bpadding%3A6px%208px%3Bmargin-bottom%3A8px%3Bfont-size%3A12px%22%3E'%2Bi(t)%2B%22%3C%2Fdiv%3E%22%3A%22%22)%2B'%3Cdiv%20style%3D%22margin-bottom%3A8px%22%3E%E8%A8%98%E9%8C%B2%E4%B8%AD%EF%BC%9A%3Cb%3E'%2Bc.length%2B'%3C%2Fb%3E%20%E3%82%AD%E3%83%A3%E3%83%A9%3C%2Fdiv%3E%3Cul%20style%3D%22list-style%3Anone%3Bmargin%3A0%200%2010px%3Bpadding%3A0%3Bmax-height%3A90px%3Boverflow%3Aauto%3Bfont-size%3A12px%22%3E'%2Bg%2B'%3C%2Ful%3E%3Cdiv%20style%3D%22display%3Aflex%3Bgap%3A6px%3Bmargin-bottom%3A6px%22%3E%3Cbutton%20id%3D%22rcAll%22%20style%3D%22'%2Bp(%22%235a7d4a%22%2C%22%23fff%22)%2B'%22%3E%E5%85%A8%E3%81%A6%E9%81%B8%E6%8A%9E%3C%2Fbutton%3E%3Cbutton%20id%3D%22rcNone%22%20style%3D%22'%2Bp(%22%237d4a4a%22%2C%22%23fff%22)%2B'%22%3E%E5%85%A8%E3%81%A6%E5%A4%96%E3%81%99%3C%2Fbutton%3E%3C%2Fdiv%3E%3Cdiv%20style%3D%22background%3A%23241b13%3Bborder%3A1px%20solid%20%234a3c28%3Bborder-radius%3A6px%3Bpadding%3A8px%2010px%3Bmargin-bottom%3A8px%22%3E%3Cdiv%20style%3D%22opacity%3A.6%3Bfont-size%3A11px%3Bmargin-bottom%3A4px%22%3E%E5%9F%BA%E6%9C%AC%E6%83%85%E5%A0%B1%3C%2Fdiv%3E'%2Bv%2B'%3Cdiv%20style%3D%22opacity%3A.6%3Bfont-size%3A11px%3Bmargin%3A6px%200%204px%22%3E%E3%82%A4%E3%83%B3%E3%83%95%E3%82%A9%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%3C%2Fdiv%3E'%2Bx%2B'%3Cdiv%20style%3D%22opacity%3A.6%3Bfont-size%3A11px%3Bmargin%3A6px%200%204px%22%3E%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%3C%2Fdiv%3E'%2Bh%2B'%3C%2Fdiv%3E%3Cbutton%20id%3D%22rcCap%22%20style%3D%22'%2Bp(%22%23c9a25a%22%2C%22%231a1410%22)%2B'%22%3E%E3%81%93%E3%81%AE%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%92%E8%A8%98%E9%8C%B2%20%2F%20%E6%9B%B4%E6%96%B0%3C%2Fbutton%3E%3Cbutton%20id%3D%22rcCsv%22%20style%3D%22'%2Bp(%22%235a7d4a%22%2C%22%23fff%22)%2B'margin-top%3A6px%22%3ECSV%E5%87%BA%E5%8A%9B%3C%2Fbutton%3E%3Cbutton%20id%3D%22rcReset%22%20style%3D%22'%2Bp(%22%237d4a4a%22%2C%22%23fff%22)%2B'margin-top%3A6px%22%3E%E5%88%9D%E6%9C%9F%E5%8C%96%3C%2Fbutton%3E%3C%2Fdiv%3E'%2Cdocument.body.appendChild(m)%2Cdocument.getElementById(%22rcClose%22).onclick%3Dfunction()%7Bm.remove()%7D%2Cdocument.getElementById(%22rcCap%22).onclick%3Ds%2Cdocument.getElementById(%22rcCsv%22).onclick%3Dd%2Cdocument.getElementById(%22rcReset%22).onclick%3Dl%2Cdocument.getElementById(%22rcAll%22).onclick%3Dfunction()%7Bb(!0)%7D%2Cdocument.getElementById(%22rcNone%22).onclick%3Dfunction()%7Bb(!1)%7D%7Dfunction%20b(t)%7Bn.forEach(function(e)%7Bvar%20n%3Ddocument.getElementById(%22rc_b_%22%2Be)%3Bn%26%26(n.checked%3Dt)%7D)%2Co.forEach(function(e)%7Bvar%20n%3Ddocument.getElementById(%22rc_i_%22%2Be)%3Bn%26%26(n.checked%3Dt)%7D)%3Bvar%20e%3Ddocument.getElementById(%22rc_status%22)%3Be%26%26(e.checked%3Dt)%7Dm(%22%22)%7D()%3B">★ RO キャラクター集計</a>
+      <div class="hint">↑ このボタンをブックマークバーへドラッグ</div>
+      <div class="fallback">
+        ドラッグできない場合：ブックマークを新規作成し、URL 欄に下記を貼り付けてください。
+        <textarea readonly onclick="this.select()">javascript:!function()%7B%22use%20strict%22%3Bvar%20t%3D%22ro_char_data_v1%22%2Ce%3D%22roCharPanel%22%2Cn%3D%5B%22%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E5%90%8D%22%2C%22%E3%82%B9%E3%83%AD%E3%83%83%E3%83%88%E7%95%AA%E5%8F%B7%22%2C%22%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%90%8D%22%2C%22%E8%81%B7%E6%A5%AD%22%5D%2Co%3D%5B%22BaseLv%E3%82%A2%E3%83%83%E3%83%97%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%B5%8C%E9%A8%93%E5%80%A4%22%2C%22JobLv%E3%82%A2%E3%83%83%E3%83%97%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%B5%8C%E9%A8%93%E5%80%A4%22%2C%22%E6%89%80%E6%8C%81%E9%87%91%22%2C%22%E6%89%80%E5%B1%9E%E3%82%AE%E3%83%AB%E3%83%89%22%2C%22%E7%8F%BE%E5%9C%A8%E3%83%9E%E3%83%83%E3%83%97%22%2C%22%E3%82%BB%E3%83%BC%E3%83%96%E3%83%9E%E3%83%83%E3%83%97%22%5D%2Ca%3D%5B%22BaseLv%22%2C%22JobLv%22%2C%22MaxHP%22%2C%22MaxSP%22%2C%22StatusPoint%22%2C%22SkillPoint%22%2C%22T.StatusPoint%22%2C%22Str%22%2C%22Agi%22%2C%22Vit%22%2C%22Int%22%2C%22Dex%22%2C%22Luk%22%2C%22Pow%22%2C%22Sta%22%2C%22Wis%22%2C%22Spl%22%2C%22Con%22%2C%22Crt%22%5D%3Bfunction%20r()%7Btry%7Bvar%20e%3DlocalStorage.getItem(t)%3Breturn%20e%3FJSON.parse(e)%3A%7B%7D%7Dcatch(t)%7Breturn%7B%7D%7D%7Dfunction%20i(t)%7Breturn%20String(t).replace(%2F%5B%26%3C%3E%22%5D%2Fg%2Cfunction(t)%7Breturn%7B%22%26%22%3A%22%26amp%3B%22%2C%22%3C%22%3A%22%26lt%3B%22%2C%22%3E%22%3A%22%26gt%3B%22%2C'%22'%3A%22%26quot%3B%22%7D%5Bt%5D%7D)%7Dfunction%20c(t)%7Breturn%20t%3DString(null%3D%3Dt%3F%22%22%3At)%2C%2F%5B%22%2C%5Cn%5D%2F.test(t)%3F'%22'%2Bt.replace(%2F%22%2Fg%2C'%22%22')%2B'%22'%3At%7Dfunction%20s()%7Bvar%20e%3Dfunction()%7Bvar%20t%3D%7Bbase%3A%7B%7D%2Cinfo%3A%7B%7D%2Cstatus%3A%7B%7D%7D%3Bfunction%20e(t%2Ce)%7Bvar%20n%3Ddocument.querySelector(t)%3Bn%26%26n.querySelectorAll(%22tr%22).forEach(function(t)%7Bfor(var%20n%3Dt.children%2Co%3D0%3Bo%3Cn.length-1%3Bo%2B%2B)if(%22TH%22%3D%3D%3Dn%5Bo%5D.tagName%26%26%22TD%22%3D%3D%3Dn%5Bo%2B1%5D.tagName)%7Bvar%20a%3Dn%5Bo%5D.textContent.trim()%2Cr%3Dn%5Bo%2B1%5D.textContent.trim()%3Ba%26%26(e%5Ba%5D%3Dr)%2Co%2B%2B%7D%7D)%7Dreturn%20e(%22section.userDate%20.base%22%2Ct.base)%2Ce(%22section.userDate%20.info%22%2Ct.info)%2Ce(%22section.userDate%20.status%22%2Ct.status)%2Ct%7D()%2Cn%3De.base%5B%22%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E5%90%8D%22%5D%3Bif(n)%7Bvar%20o%3Dr()%3Bo%5Bfunction(t)%7Bvar%20e%3Dlocation.pathname.match(%2F%5C%2F(%5Cd%2B)%5C%2F(%5Cd%2B)%2F)%3Breturn(e%3Fe%5B1%5D%3A%22%22)%2B%22%2F%22%2B(e%3Fe%5B2%5D%3At.base%5B%22%E3%82%B9%E3%83%AD%E3%83%83%E3%83%88%E7%95%AA%E5%8F%B7%22%5D%7C%7C%22%22)%7D(e)%5D%3D%7Bbase%3Ae.base%2Cinfo%3Ae.info%2Cstatus%3Ae.status%2CcapturedAt%3A(new%20Date).toISOString()%7D%2Cfunction(e)%7Btry%7BlocalStorage.setItem(t%2CJSON.stringify(e))%7Dcatch(t)%7Balert(%22%E4%BF%9D%E5%AD%98%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%3A%20%22%2Bt.message)%7D%7D(o)%2Cm(%22%E3%80%8C%22%2Bn%2B%22%E3%80%8D%E3%82%92%E8%A8%98%E9%8C%B2%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%22)%7Delse%20alert(%22%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E6%83%85%E5%A0%B1%E3%81%8C%E8%A6%8B%E3%81%A4%E3%81%8B%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F%E3%80%82%5Cn%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E9%80%A3%E5%8B%95%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E9%96%8B%E3%81%84%E3%81%A6%E3%81%8B%E3%82%89%E5%AE%9F%E8%A1%8C%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82%22)%7Dfunction%20u()%7Bvar%20t%3Dr()%2Ce%3DObject.keys(t)%3Bif(0%3D%3D%3De.length)return%20alert(%22%E3%81%BE%E3%81%A0%E8%A8%98%E9%8C%B2%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%80%82%22)%2Cnull%3Bvar%20i%3Dfunction()%7Bvar%20t%3D%7Bbase%3A%5B%5D%2Cinfo%3A%5B%5D%2Cstatus%3A!1%7D%3Bn.forEach(function(e)%7Bvar%20n%3Ddocument.getElementById(%22rc_b_%22%2Be)%3Bn%26%26n.checked%26%26t.base.push(e)%7D)%2Co.forEach(function(e)%7Bvar%20n%3Ddocument.getElementById(%22rc_i_%22%2Be)%3Bn%26%26n.checked%26%26t.info.push(e)%7D)%3Bvar%20e%3Ddocument.getElementById(%22rc_status%22)%3Breturn%20t.status%3D!!e%26%26e.checked%2Ct%7D()%2Cs%3D%5B%5D%3Bif(i.base.forEach(function(t)%7Bs.push(t)%7D)%2Ci.info.forEach(function(t)%7Bs.push(t)%7D)%2Ci.status%26%26a.forEach(function(t)%7Bs.push(t)%7D)%2C0%3D%3D%3Ds.length)return%20alert(%22%E5%87%BA%E5%8A%9B%E3%81%99%E3%82%8B%E9%A0%85%E7%9B%AE%E3%81%8C%E9%81%B8%E6%8A%9E%E3%81%95%E3%82%8C%E3%81%A6%E3%81%84%E3%81%BE%E3%81%9B%E3%82%93%E3%80%82%22)%2Cnull%3Bvar%20u%3D%5Bs.map(c).join(%22%2C%22)%5D%3Breturn%20e.forEach(function(e)%7Bvar%20n%3Dt%5Be%5D%2Co%3D%5B%5D%3Bi.base.forEach(function(t)%7Bo.push(n.base%5Bt%5D%7C%7C%22%22)%7D)%2Ci.info.forEach(function(t)%7Bo.push(n.info%5Bt%5D%7C%7C%22%22)%7D)%2Ci.status%26%26a.forEach(function(t)%7Bo.push(n.status%5Bt%5D%7C%7C%22%22)%7D)%2Cu.push(o.map(c).join(%22%2C%22))%7D)%2Cu.join(%22%5Cr%5Cn%22)%7Dfunction%20d()%7Bvar%20t%3Du()%3Bif(null!%3D%3Dt)%7Bvar%20e%3D(new%20Date).toISOString().slice(0%2C10)%2Cn%3Dnew%20Blob(%5B%22%5Cufeff%22%2Ct%5D%2C%7Btype%3A%22text%2Fcsv%3Bcharset%3Dutf-8%22%7D)%2Co%3DURL.createObjectURL(n)%2Ca%3Ddocument.createElement(%22a%22)%3Ba.href%3Do%2Ca.download%3D%22ro_char_%22%2Be%2B%22.csv%22%2Cdocument.body.appendChild(a)%2Ca.click()%2CsetTimeout(function()%7Bdocument.body.removeChild(a)%2CURL.revokeObjectURL(o)%7D%2C100)%7D%7Dfunction%20l()%7Bconfirm(%22%E8%A8%98%E9%8C%B2%E3%81%97%E3%81%9F%E5%85%A8%E3%82%AD%E3%83%A3%E3%83%A9%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E3%82%92%E6%B6%88%E5%8E%BB%E3%81%97%E3%81%BE%E3%81%99%E3%80%82%E3%82%88%E3%82%8D%E3%81%97%E3%81%84%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F%22)%26%26(localStorage.removeItem(t)%2Cm(%22%E8%A8%98%E9%8C%B2%E3%82%92%E3%81%99%E3%81%B9%E3%81%A6%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%22))%7Dfunction%20p(t%2Ce)%7Breturn%22width%3A100%25%3Bpadding%3A7px%200%3Bborder%3Anone%3Bborder-radius%3A6px%3Bcursor%3Apointer%3Bfont-weight%3Abold%3Bfont-size%3A12px%3Bbackground%3A%22%2Bt%2B%22%3Bcolor%3A%22%2Be%2B%22%3B%22%7Dfunction%20f(t%2Ce%2Cn)%7Breturn'%3Clabel%20style%3D%22display%3Ablock%3Bfont-size%3A12px%3Bpadding%3A2px%200%3Bcursor%3Apointer%3B%22%3E%3Cinput%20type%3D%22checkbox%22%20id%3D%22'%2Bt%2B'%22'%2B(n%3F%22%20checked%22%3A%22%22)%2B'%20style%3D%22margin-right%3A6px%3Bvertical-align%3Amiddle%3B%22%3E'%2Bi(e)%2B%22%3C%2Flabel%3E%22%7Dfunction%20m(t)%7Bvar%20a%3Dr()%2Cc%3DObject.keys(a)%2Cu%3Ddocument.getElementById(e)%3Bu%26%26u.remove()%3Bvar%20m%3Ddocument.createElement(%22div%22)%3Bm.id%3De%2Cm.style.cssText%3D%5B%22position%3Afixed%22%2C%22top%3A12px%22%2C%22right%3A12px%22%2C%22z-index%3A999999%22%2C%22width%3A300px%22%2C%22max-height%3A90vh%22%2C%22overflow%3Aauto%22%2C%22background%3A%231a1410%22%2C%22color%3A%23f3e9d8%22%2C%22border%3A1px%20solid%20%23c9a25a%22%2C%22border-radius%3A10px%22%2C%22box-shadow%3A0%208px%2028px%20rgba(0%2C0%2C0%2C.45)%22%2C'font-family%3A%22Hiragino%20Kaku%20Gothic%20ProN%22%2Csystem-ui%2Csans-serif'%2C%22font-size%3A13px%22%5D.join(%22%3B%22)%3Bvar%20g%3Dc.map(function(t)%7Bvar%20e%3Da%5Bt%5D%3Breturn'%3Cli%20style%3D%22padding%3A2px%200%3Bborder-bottom%3A1px%20dotted%20%234a3c28%22%3E%3Cb%3E'%2Bi(e.base%5B%22%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E5%90%8D%22%5D%7C%7C%22%3F%22)%2B'%3C%2Fb%3E%20%3Cspan%20style%3D%22opacity%3A.7%22%3E'%2Bi(e.base%5B%22%E3%83%AF%E3%83%BC%E3%83%AB%E3%83%89%E5%90%8D%22%5D%7C%7C%22%22)%2B%22%3C%2Fspan%3E%3C%2Fli%3E%22%7D).join(%22%22)%2Cv%3Dn.map(function(t)%7Breturn%20f(%22rc_b_%22%2Bt%2Ct%2C!0)%7D).join(%22%22)%2Cx%3Do.map(function(t)%7Breturn%20f(%22rc_i_%22%2Bt%2Ct%2C!0)%7D).join(%22%22)%2Ch%3Df(%22rc_status%22%2C%22%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%EF%BC%88BaseLv%E3%80%9CCrt%EF%BC%89%22%2C!0)%3Bm.innerHTML%3D'%3Cdiv%20style%3D%22background%3A%232a1f15%3Bpadding%3A8px%2012px%3Bfont-weight%3Abold%3Bborder-bottom%3A1px%20solid%20%23c9a25a%3Bdisplay%3Aflex%3Bjustify-content%3Aspace-between%3Balign-items%3Acenter%22%3E%3Cspan%3ERO%20%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BC%E9%9B%86%E8%A8%88%3C%2Fspan%3E%3Cspan%20id%3D%22rcClose%22%20style%3D%22cursor%3Apointer%3Bopacity%3A.7%22%3E%C3%97%3C%2Fspan%3E%3C%2Fdiv%3E%3Cdiv%20style%3D%22padding%3A10px%2012px%22%3E'%2B(t%3F'%3Cdiv%20style%3D%22background%3A%233a2e1c%3Bborder-radius%3A6px%3Bpadding%3A6px%208px%3Bmargin-bottom%3A8px%3Bfont-size%3A12px%22%3E'%2Bi(t)%2B%22%3C%2Fdiv%3E%22%3A%22%22)%2B'%3Cdiv%20style%3D%22margin-bottom%3A8px%22%3E%E8%A8%98%E9%8C%B2%E4%B8%AD%EF%BC%9A%3Cb%3E'%2Bc.length%2B'%3C%2Fb%3E%20%E3%82%AD%E3%83%A3%E3%83%A9%3C%2Fdiv%3E%3Cul%20style%3D%22list-style%3Anone%3Bmargin%3A0%200%2010px%3Bpadding%3A0%3Bmax-height%3A90px%3Boverflow%3Aauto%3Bfont-size%3A12px%22%3E'%2Bg%2B'%3C%2Ful%3E%3Cdiv%20style%3D%22display%3Aflex%3Bgap%3A6px%3Bmargin-bottom%3A6px%22%3E%3Cbutton%20id%3D%22rcAll%22%20style%3D%22'%2Bp(%22%235a7d4a%22%2C%22%23fff%22)%2B'%22%3E%E5%85%A8%E3%81%A6%E9%81%B8%E6%8A%9E%3C%2Fbutton%3E%3Cbutton%20id%3D%22rcNone%22%20style%3D%22'%2Bp(%22%237d4a4a%22%2C%22%23fff%22)%2B'%22%3E%E5%85%A8%E3%81%A6%E5%A4%96%E3%81%99%3C%2Fbutton%3E%3C%2Fdiv%3E%3Cdiv%20style%3D%22background%3A%23241b13%3Bborder%3A1px%20solid%20%234a3c28%3Bborder-radius%3A6px%3Bpadding%3A8px%2010px%3Bmargin-bottom%3A8px%22%3E%3Cdiv%20style%3D%22opacity%3A.6%3Bfont-size%3A11px%3Bmargin-bottom%3A4px%22%3E%E5%9F%BA%E6%9C%AC%E6%83%85%E5%A0%B1%3C%2Fdiv%3E'%2Bv%2B'%3Cdiv%20style%3D%22opacity%3A.6%3Bfont-size%3A11px%3Bmargin%3A6px%200%204px%22%3E%E3%82%A4%E3%83%B3%E3%83%95%E3%82%A9%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%3C%2Fdiv%3E'%2Bx%2B'%3Cdiv%20style%3D%22opacity%3A.6%3Bfont-size%3A11px%3Bmargin%3A6px%200%204px%22%3E%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%3C%2Fdiv%3E'%2Bh%2B'%3C%2Fdiv%3E%3Cbutton%20id%3D%22rcCap%22%20style%3D%22'%2Bp(%22%23c9a25a%22%2C%22%231a1410%22)%2B'%22%3E%E3%81%93%E3%81%AE%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%92%E8%A8%98%E9%8C%B2%20%2F%20%E6%9B%B4%E6%96%B0%3C%2Fbutton%3E%3Cbutton%20id%3D%22rcCsv%22%20style%3D%22'%2Bp(%22%235a7d4a%22%2C%22%23fff%22)%2B'margin-top%3A6px%22%3ECSV%E5%87%BA%E5%8A%9B%3C%2Fbutton%3E%3Cbutton%20id%3D%22rcReset%22%20style%3D%22'%2Bp(%22%237d4a4a%22%2C%22%23fff%22)%2B'margin-top%3A6px%22%3E%E5%88%9D%E6%9C%9F%E5%8C%96%3C%2Fbutton%3E%3C%2Fdiv%3E'%2Cdocument.body.appendChild(m)%2Cdocument.getElementById(%22rcClose%22).onclick%3Dfunction()%7Bm.remove()%7D%2Cdocument.getElementById(%22rcCap%22).onclick%3Ds%2Cdocument.getElementById(%22rcCsv%22).onclick%3Dd%2Cdocument.getElementById(%22rcReset%22).onclick%3Dl%2Cdocument.getElementById(%22rcAll%22).onclick%3Dfunction()%7Bb(!0)%7D%2Cdocument.getElementById(%22rcNone%22).onclick%3Dfunction()%7Bb(!1)%7D%7Dfunction%20b(t)%7Bn.forEach(function(e)%7Bvar%20n%3Ddocument.getElementById(%22rc_b_%22%2Be)%3Bn%26%26(n.checked%3Dt)%7D)%2Co.forEach(function(e)%7Bvar%20n%3Ddocument.getElementById(%22rc_i_%22%2Be)%3Bn%26%26(n.checked%3Dt)%7D)%3Bvar%20e%3Ddocument.getElementById(%22rc_status%22)%3Be%26%26(e.checked%3Dt)%7Dm(%22%22)%7D()%3B</textarea>
+      </div>
+    </div>
+
+    <div class="step-label">② 使う</div>
+    <p>まずはガンホー公式のマイページにログインし、<strong>「ゲーム起動」ボタンの下にある緑色の「キャラクター連動」</strong>を押して、キャラクター連動ページを開いてください。このページを開いて初めてブックマークレットが使えます。</p>
+    <figure class="figure">
+      <img src="img/account_menu.png" alt="マイページの「キャラクター連動」ボタンの位置">
+      <figcaption>「ゲーム起動」の下にある<strong>「キャラクター連動」</strong>を押す</figcaption>
+    </figure>
+    <ol>
+      <li>開いた<strong>キャラクター連動ページ</strong>でワールドとキャラを選び、表示する（例：<code>rowebtool.gungho.jp/quest/2/1</code>）</li>
+      <li>ブックマークバーの<strong>「★ RO キャラクター集計」をクリック</strong>。画面右上にパネルが出ます。</li>
+      <li>パネルで<strong>出力したい項目をチェック</strong>します（「全て選択」「全て外す」ボタンもあります）。</li>
+      <li><strong>「このキャラを記録 / 更新」</strong>を押す → そのキャラが記録されます。</li>
+      <li>次のキャラを表示して同じ操作を繰り返す（記録中のキャラ数がパネルに表示されます）。</li>
+      <li>全キャラ終えたら<strong>「CSV出力」</strong>を押す → ファイルがダウンロードされます。</li>
+    </ol>
+
+    <div class="note">
+      項目のチェックは<strong>CSV出力の直前の状態</strong>が反映されます。記録は全項目を保存しているので、チェックを変えて何度でも出力し直せます。
+    </div>
+
+    <div class="step-label">③ 取得できる項目</div>
+    <p>下記の項目から、必要なものだけをチェックで選べます。</p>
+    <p style="font-weight:700;margin-bottom:4px">基本情報</p>
+    <div class="fields">
+      <span class="field-chip">キャラクター名</span><span class="field-chip">スロット番号</span>
+      <span class="field-chip">ワールド名</span><span class="field-chip">職業</span>
+    </div>
+    <p style="font-weight:700;margin-bottom:4px">インフォメーション</p>
+    <div class="fields">
+      <span class="field-chip">Base必要経験値</span><span class="field-chip">Job必要経験値</span>
+      <span class="field-chip">所持金</span><span class="field-chip">所属ギルド</span>
+      <span class="field-chip">現在マップ</span><span class="field-chip">セーブマップ</span>
+    </div>
+    <p style="font-weight:700;margin-bottom:4px">ステータス<span style="font-weight:400;color:var(--text-light);font-size:12px">（チェックすると下記をまとめて取得）</span></p>
+    <div class="fields">
+      <span class="field-chip">BaseLv</span><span class="field-chip">JobLv</span>
+      <span class="field-chip">MaxHP</span><span class="field-chip">MaxSP</span>
+      <span class="field-chip">StatusPoint</span><span class="field-chip">SkillPoint</span>
+      <span class="field-chip">T.StatusPoint</span>
+      <span class="field-chip">Str</span><span class="field-chip">Agi</span>
+      <span class="field-chip">Vit</span><span class="field-chip">Int</span>
+      <span class="field-chip">Dex</span><span class="field-chip">Luk</span>
+      <span class="field-chip">Pow</span><span class="field-chip">Sta</span>
+      <span class="field-chip">Wis</span><span class="field-chip">Spl</span>
+      <span class="field-chip">Con</span><span class="field-chip">Crt</span>
+    </div>
+    <p style="font-size:12px;color:var(--text-light)">※ステータスの数値は装備込みの表記（例：<code>130（＋10）</code>）のまま出力されます。</p>
+
+    <div class="step-label">④ 出力イメージ</div>
+    <p>キャラを行、選んだ項目を列に並べた一覧表になります（チェックした項目だけが列になります）。</p>
+    <div class="demo-wrap">
+    <table class="demo">
+      <tr><th>キャラクター名</th><th>ワールド名</th><th>職業</th><th>所持金</th><th>BaseLv</th><th>JobLv</th><th>Str</th></tr>
+      <tr><td>キャラ名1</td><td>Breidablik</td><td>マイスター</td><td>125,855,562</td><td>204</td><td>31</td><td>130（＋10）</td></tr>
+      <tr><td>キャラ名2</td><td>Breidablik</td><td>カーディナル</td><td>8,200,300</td><td>200</td><td>50</td><td>1（＋5）</td></tr>
+    </table>
+    </div>
+
+    <div class="warn">
+      <strong>注意</strong><br>
+      ・複数ワールドにキャラがいる場合も、ワールドを切り替えて記録すれば1つの表にまとまります（ワールド＋スロットで区別）。<br>
+      ・記録は同じブラウザの保存領域に残ります。別のPCやブラウザでは引き継がれません。<br>
+      ・記録自体は全項目を保存します。チェックは「どの項目をCSVに出すか」の選択です。<br>
+      ・公式ページの作りが変わると動かなくなることがあります。その場合は配布元の更新版をご利用ください。<br>
+      ・全データを消したいときはパネルの<strong>「初期化」</strong>を押してください。
+    </div>
+
+  </div>
+
+  <footer>© 2026 RO活動日記</footer>
+
+</body>
+</html>
