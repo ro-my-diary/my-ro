@@ -14,6 +14,11 @@
   --card-hover: #fafafa;
 }
 
+html {
+  /* スクロールバーの有無でページ幅が変わり、右寄せnavがズレるのを防ぐ */
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: 'Noto Sans JP', sans-serif;
   background: var(--bg);
