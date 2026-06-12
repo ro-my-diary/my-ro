@@ -111,11 +111,10 @@
     }
     .map-popup .guide-h {
       position: absolute;
-      top: 50%; left: 0; right: 0;
+      left: 0; right: 0;
       background: rgba(255,255,255,0.6);
       height: 7px;
-      margin-top: -3px; /* 200〜207px = 中心203.5 */
-      top: calc(200 / 365 * 100%);
+      top: calc((1 - 207 / 365) * 100%); /* y=200〜207 を map-dot と同じ座標系で */
     }
     .map-popup .guide-v {
       position: absolute;
