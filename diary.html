@@ -7,28 +7,44 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .page-hero {
-      padding: 40px 40px 32px;
-      max-width: 900px;
-      margin: 0 auto;
-      border-bottom: 1px solid var(--border);
-    }
+    .page-hero { padding: 40px 40px 32px; max-width: 900px; margin: 0 auto; border-bottom: 1px solid var(--border); }
     .page-hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-    .page-hero p  { font-size: 13px; color: var(--text-light); }
+    .page-hero p  { font-size: 13px; color: var(--text-light); line-height: 1.8; }
 
-    .wip-area {
-      max-width: 900px;
-      margin: 80px auto;
-      padding: 0 40px;
-      text-align: center;
+    .app-list { max-width: 900px; margin: 0 auto; padding: 32px 40px 48px; }
+    .list-label {
+      font-size: 11px; letter-spacing: 0.15em; color: var(--text-light);
+      text-transform: uppercase; margin-bottom: 20px; font-weight: 500;
     }
-    .wip-icon { font-size: 48px; margin-bottom: 24px; }
-    .wip-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
-    .wip-desc { font-size: 14px; color: var(--text-light); line-height: 1.8; }
+
+    .app-row {
+      display: flex; align-items: center; gap: 20px;
+      padding: 22px 4px; text-decoration: none;
+      border-top: 1px solid var(--border);
+      transition: background 0.15s; position: relative;
+    }
+    .app-row:last-of-type { border-bottom: 1px solid var(--border); }
+    a.app-row:hover { background: var(--card-hover); }
+    a.app-row:hover .app-arrow { transform: translateX(4px); color: var(--accent); }
+
+    .app-num {
+      font-size: 12px; color: var(--text-light); font-weight: 500;
+      letter-spacing: 0.1em; width: 28px; flex-shrink: 0;
+    }
+    .app-body { flex: 1; }
+    .app-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .app-desc  { font-size: 12px; color: var(--text-light); line-height: 1.7; }
+
+    .app-arrow { font-size: 16px; color: var(--border); transition: all 0.15s; flex-shrink: 0; }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 24px 20px; }
+      .app-list { padding: 24px 20px 40px; }
+      .app-row { gap: 12px; }
+    }
   </style>
 </head>
 <body>
-
   <header>
     <a class="site-title" href="index.html">RO<span>活動</span>日記</a>
     <nav>
@@ -49,13 +65,38 @@
     <p>RO冒険の日々を記録しています。</p>
   </div>
 
-  <div class="wip-area">
-    <div class="wip-icon">📖</div>
-    <div class="wip-title">準備中</div>
-    <div class="wip-desc">現在コンテンツを準備中です。<br>しばらくお待ちください。</div>
+  <div class="app-list">
+    <div class="list-label">Diary List</div>
+
+    <a class="app-row" href="diary/diary-03.html">
+      <div class="app-num">03</div>
+      <div class="app-body">
+        <div class="app-title">サンプル③</div>
+        <div class="app-desc">日記の説明文がここに入ります。</div>
+      </div>
+      <div class="app-arrow">→</div>
+    </a>
+
+    <a class="app-row" href="diary/diary-02.html">
+      <div class="app-num">02</div>
+      <div class="app-body">
+        <div class="app-title">サンプル②</div>
+        <div class="app-desc">日記の説明文がここに入ります。</div>
+      </div>
+      <div class="app-arrow">→</div>
+    </a>
+
+    <a class="app-row" href="diary/diary-01.html">
+      <div class="app-num">01</div>
+      <div class="app-body">
+        <div class="app-title">サンプル①</div>
+        <div class="app-desc">日記の説明文がここに入ります。</div>
+      </div>
+      <div class="app-arrow">→</div>
+    </a>
+
   </div>
 
   <footer>© 2026 RO活動日記</footer>
-
 </body>
 </html>
